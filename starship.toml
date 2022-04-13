@@ -1,0 +1,39 @@
+[character]
+success_symbol = "[](bold green)"
+error_symbol = "[](bold red)"
+format = "$symbol [](bold white) "
+
+[directory]
+truncation_length = 8
+truncation_symbol = "…/"
+read_only = ""
+style = "bold"
+format = "[$path]($style) [$read_only]($read_only_style)($style)"
+
+[cmd_duration]
+min_time = 2_000
+format = "task completed in [$duration](bold yellow)"
+
+[git_status]
+conflicted = "ﲅ"
+ahead = "ﰲ"
+behind = "ﰯ"
+diverged = ""
+up_to_date = "✓"
+untracked = "鈴"
+stashed = ""
+modified = ""
+staged = ''
+renamed = ""
+deleted = ""
+
+[package]
+format = "via [🎁 $version](208 bold) "
+
+[time]
+disabled = false
+format = '[]($style) [$time]($style) []($style) '
+style = "Bold Blue"
+time_format = "%T"
+utc_time_offset = "3"
+time_range = "00:00:00-24:00:00"
