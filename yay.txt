@@ -12,3 +12,5 @@ lumins-bin
 powershell-bin
 appimage-cli-tool-git
 appimagelauncher-git
+toilet
+figlet-fonts

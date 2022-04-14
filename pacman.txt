@@ -77,3 +77,4 @@ nodejs
 privoxy
 pyqt5
 python-pip
+figlet
