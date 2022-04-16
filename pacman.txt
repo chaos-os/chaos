@@ -68,7 +68,6 @@ aria2
 unzip
 libgccjit
 jansson
-git-annex
 p7zip
 jdk-openjdk
 ninja
