@@ -61,7 +61,6 @@ snapper
 bleachbit
 rkhunter
 clamtk
-neovim
 pandoc
 acpi
 aria2
@@ -77,3 +76,6 @@ privoxy
 pyqt5
 python-pip
 figlet
+vim
+lua
+lolcat

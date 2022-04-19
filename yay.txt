@@ -1,4 +1,3 @@
-brave-bin
 nerd-fonts-mononoki
 lain-git
 realvnc-vnc-viewer

@@ -1,34 +1,35 @@
 #!/bin/env bash
+
 cat banner.txt
 echo ""
-echo "############################################################################"
-echo "########                   INSTALLING NEON-OS                       ########"
-echo "############################################################################"
+echo "############################################################################" | lolcat
+echo "########                   INSTALLING NEON-OS                       ########" | lolcat
+echo "############################################################################" | lolcat
 
-echo "---C----           adding and populating pacman-keys                ---C----"
+echo "---C----           adding and populating pacman-keys                ---C----" | toilet -d /usr/share/figlet/fonts/ -f term -t -F border --rainbow 
 sudo pacman-key --init
 sudo pacman-key --populate
 
-echo "---C----           syncing and updating repositories                ---C----"
+echo "---C----           syncing and updating repositories                ---C----" | toilet -d /usr/share/figlet/fonts/ -f term -t -F border --rainbow
 sudo pacman -Syu --noconfirm --needed
 
-echo "---C----           virtual machine or bare metal                    ---C----"
+echo "---C----           virtual machine or bare metal                    ---C----" | toilet -d /usr/share/figlet/fonts/ -f term -t -F border --rainbow
 read -p "are you running archlinux in virtual environment [y/n]? " answer
 if [[ $answer == "y" || $answer == "Y" ]]
 then
-    echo "proceeding to install open source graphics drivers"
+    echo "proceeding to install open source graphics drivers" | toilet -d /usr/share/figlet/fonts/ -f term -t -F border --rainbow
     sudo pacman -S xf86-video-fbdev --noconfirm --needed
 else
   echo "proceeding with the installation"
 fi
 
-echo "---C----              Configuring mirrors                           ---C----"
+echo "---C----              Configuring mirrors                           ---C----" | toilet -d /usr/share/figlet/fonts/ -f term -t -F border --rainbow
 sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
 sudo pacman -S reflector rsync --noconfirm --needed
 sudo reflector -l 20 -f 5 -a 48 --sort rate --save /etc/pacman.d/mirrorlist
 sudo cp pacman.conf /etc/pacman.conf
 
-echo "---C----              Installing linux kernel-headers                ---C----"
+echo "---C----              Installing linux kernel-headers                ---C----" | toilet -d /usr/share/figlet/fonts/ -f term -t -F border --rainbow
 read -p "1)linux-zen  2)linux  3)linux-lts  4)other " answer4
 if [[ $answer4 == "1" ]]
 then
@@ -46,7 +47,7 @@ else
     echo "please install your custom linux headers after install"
 fi
 
-echo "---C----             Installing Primary Gpu packages                  ---C----"
+echo "---C----             Installing Primary Gpu packages                  ---C----" | toilet -d /usr/share/figlet/fonts/ -f term -t -F border --rainbow
 read -p "is one of your gpu intel [Y/N]? " answer12
 if [[ $answer12 == "Y" || $answer12 == "y" ]]
 then
@@ -56,7 +57,7 @@ else
     echo "terminated"
 fi
 
-echo "---C----             Installing Appropriate Gpu packages              ---C----"
+echo "---C----             Installing Appropriate Gpu packages              ---C----" | toilet -d /usr/share/figlet/fonts/ -f term -t -F border --rainbow
 read -p "1)Nvidia  2)Amd  3)Intel  4)quit " answer5
 if [[ $answer5 == "1" ]]
 then
@@ -91,7 +92,7 @@ else
     echo "terminated"
 fi
 
-echo "---C----              Installing Hybrid Gpu packages                   ---C----"
+echo "---C----              Installing Hybrid Gpu packages                   ---C----" | toilet -d /usr/share/figlet/fonts/ -f term -t -F border --rainbow
 read -p "1)Nvidia-hybrid  2)Amd-hybrid  3)quit " answer6
 if [[ $answer6 == "1" ]]
 then
@@ -114,7 +115,7 @@ else
     echo "terminated"
 fi
 
-echo "---C----              Installing Cpu Ucodes                         ---C----"
+echo "---C----              Installing Cpu Ucodes                         ---C----" | toilet -d /usr/share/figlet/fonts/ -f term -t -F border --rainbow
 read -p "1)Intel-ucode  2)Amd-ucode  3)quit" answer6
 if [[ $answer6 == "1" ]]
 then
@@ -130,10 +131,10 @@ else
     echo "terminated"
 fi
 
-echo "---C----              Installing my packages                        ---C----"
+echo "---C----              Installing my packages                        ---C----" | toilet -d /usr/share/figlet/fonts/ -f term -t -F border --rainbow
 sudo pacman -S - < pacman.txt --noconfirm --needed
 
-echo "---C----              running one or multiple monitors              ---C----"
+echo "---C----              running one or multiple monitors              ---C----" | toilet -d /usr/share/figlet/fonts/ -f term -t -F border --rainbow
 read -p "are you running multiple monitors [Y/N]? " answer3
 if [[ $answer3 == "Y" || $answer3 == "y" ]]
 then
@@ -143,7 +144,7 @@ else
     echo "proceeding with the installation"
 fi
 
-echo "---C----              Installing openssh/ssh                        ---C----"
+echo "---C----              Installing openssh/ssh                        ---C----" | toilet -d /usr/share/figlet/fonts/ -f term -t -F border --rainbow
 read -p "do you want to install openssh/ssh [Y/N]? " answer10
 if [[ $answer10 == "Y" || $answer10 == "y" ]]
 then
@@ -154,29 +155,29 @@ else
     echo "terminated"
 fi
 
-echo "############################################################################"
-echo "########                   ADDING LOGIN MANAGER                     ########"
-echo "############################################################################"
+echo "############################################################################" | lolcat
+echo "########                   ADDING LOGIN MANAGER                     ########" | lolcat
+echo "############################################################################" | lolcat
 
 sudo systemctl enable sddm.service -f
 
-echo "############################################################################"
-echo "########                   ENABLING AUR AND SNAP                    ########"
-echo "############################################################################"
+echo "############################################################################" | lolcat
+echo "########                   ENABLING AUR AND SNAP                    ########" | lolcat
+echo "############################################################################" | lolcat
 
 sudo cp makepkg.conf /etc/
 git clone https://aur.archlinux.org/paru-bin.git
 cd paru-bin
 makepkg -si
 
-echo "############################################################################"
-echo "########             INSTALLING AUR AND SNAP PACKAGES               ########"
-echo "############################################################################"
+echo "############################################################################" | lolcat
+echo "########                   INSTALLING AUR PACKAGES                  ########" | lolcat
+echo "############################################################################" | lolcat
 
 cd 
-paru -S - < open-neon-os/yay.txt --noconfirm --needed
+paru -S - < neon-os/yay.txt --noconfirm --needed
 
-echo "---C----              Installing optimus-manager                    ---C----"
+echo "---C----              Installing optimus-manager                    ---C----" | toilet -d /usr/share/figlet/fonts/ -f term -t -F border --rainbow
 sudo mkdir /etc/sddm.conf.d/
 read -p "do you want to install optimus-manager [Y/N]? " answer8
 if [[ $answer8 == "Y" || $answer8 == "y" ]]
@@ -192,12 +193,9 @@ else
     sudo cp sddm-alt.conf /etc/sddm.conf.d/sddm.conf
 fi
 
-sudo systemctl enable --now snapd.socket
-sudo snap install - < open-neon-os/snap.txt
-
-echo "############################################################################"
-echo "########               ADDING WALLPAPERS FOR neon-os                ########"
-echo "############################################################################"
+echo "############################################################################" | lolcat
+echo "########               ADDING WALLPAPERS FOR neon-os                ########" | lolcat
+echo "############################################################################" | lolcat
 
 cd
 mkdir Pictures
@@ -206,12 +204,13 @@ sudo mkdir /usr/share/themes
 cd Pictures
 git clone https://gitlab.com/dwt1/wallpapers.git
 
-echo "############################################################################"
-echo "########                  PLACING THE CONFIG FILES                  ########"
-echo "############################################################################"
+echo "############################################################################" | lolcat
+echo "########                  PLACING THE CONFIG FILES                  ########" | lolcat
+echo "############################################################################" | lolcat
 
 cd
-cd open-neon-os
+git clone https://gitlab.com/NEON-MMD/dotfiles.git
+cd dotfiles
 cp -r qtile ~/.config/
 cp -r awesome ~/.config/
 cp -r picom ~/.config/
@@ -223,6 +222,8 @@ cp -r i3 ~/.config/
 cp -r i3blocks ~/.config/
 cp -r scripts ~/.config/
 cp starship.toml ~/.config/starship.toml
+cd
+cd neon-os
 sudo cp -r Arc-Cyberpunk-Neon  /usr/share/themes/
 sudo cp -r all-themes-sddm/ /usr/share/sddm/themes/
 sudo cp reflector.conf /etc/xdg/reflector/reflector.conf
@@ -233,18 +234,19 @@ sudo cp -r home /etc/snapper/configs/
 sudo cp -r root /etc/snapper/configs/
 sudo cp paru.conf /etc/paru.conf
 sudo cp usr-scripts/* /usr/bin/
-cp -r script-dependencies ~/.config
+cp -r script-dependencies/ ~/.config
 sudo cp youtube.lua /usr/lib/vlc/lua/playlist/youtube.luac
 
-echo "############################################################################"
-echo "########                    CONFIGURING NEOVIM                      ########"
-echo "############################################################################"
+echo "############################################################################" | lolcat
+echo "########                    CONFIGURING NEOVIM                      ########" | lolcat
+echo "############################################################################" | lolcat
 
-curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+                         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
-echo "############################################################################"
-echo "########                    ENABLING SERVICES                       ########"
-echo "############################################################################"
+echo "############################################################################" | lolcat
+echo "########                    ENABLING SERVICES                       ########" | lolcat
+echo "############################################################################" | lolcat
 
 sudo systemctl enable --now bluetooth
 sudo systemctl enable --now alsa-state.service
@@ -262,7 +264,7 @@ sudo systemctl mask systemd-rfkill.socket
 systemctl enable --user pipewire.service p11-kit-server.service pulseaudio.service snapd.session-agent.socket systemd-tmpfiles-clean.timer systemd-tmpfiles-setup.service
 sudo systemctl enable clamav-freshclam.service clamav-clamonacc.service clamav-daemon.service clamav-daemon.socket
 
-echo "---C----			          LAPTOP OR DESKTOP			              ---C----"
+echo "---C----			          LAPTOP OR DESKTOP			              ---C----" | toilet -d /usr/share/figlet/fonts/ -f term -t -F border --rainbow
 read -p "are you running a laptop [Y/N]? " answer2
 if [[ $answer2 == "y" || $answer2 == "Y" ]]
 then
@@ -274,44 +276,36 @@ else
     echo "proceeding with the installation"
 fi
 
-echo "############################################################################"
-echo "########                   INSTALLING DOOM EMACS                    ########"
-echo "############################################################################"
-
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-sudo npm i -g bash-language-server
-sudo npm install -g vscode-css-languageserver-bin
-sudo npm install -g vscode-html-languageserver-bin
-sudo npm i -g typescript-language-server
-sudo npm i -g typescript
-sudo rustup component add rls rust-analysis rust-src
+echo "############################################################################" | lolcat
+echo "########                   INSTALLING DOOM EMACS                    ########" | lolcat
+echo "############################################################################" | lolcat
 
 cd
 git clone https://aur.archlinux.org/emacs-git.git
 cd emacs-git
 sed -i 's/^JIT=\(     \)/JIT="YES"/' PKGBUILD
 makepkg --syncdeps --install
-cd ~/open-neon-os
-cp .emacs.d/ ../
+cd ~/neon-os
+cp -r .emacs.d/ ../
 cd
 
-echo "############################################################################"
-echo "########                 INSTALLING NEON-BROWSER                    ########"
-echo "############################################################################"
+echo "############################################################################" | lolcat
+echo "########                 INSTALLING NEON-BROWSER                    ########" | lolcat
+echo "############################################################################" | lolcat
 
 git clone https://gitlab.com/NEON-MMD/neon-browser.git
 cd neon-browser
 ./install.sh
 
-echo "############################################################################"
-echo "########                  ADDING USER TO GROUPS                     ########"
-echo "############################################################################"
+echo "############################################################################" | lolcat
+echo "########                  ADDING USER TO GROUPS                     ########" | lolcat
+echo "############################################################################" | lolcat
 
 sudo usermod -aG kvm,vboxusers ${USER}
 
-echo "############################################################################"
-echo "########                      SETTING UP TPM                        ########"
-echo "############################################################################"
+echo "############################################################################" | lolcat
+echo "########                      SETTING UP TPM                        ########" | lolcat
+echo "############################################################################" | lolcat
 
 read -p "1)TPM-1.2  2)TPM-2.0  3)Quit " answer
 if [[ $answer == "1" ]]
@@ -329,14 +323,14 @@ else
     echo "terminated"
 fi
 
-echo "############################################################################"
-echo "########                  REPLACING SUDO WITH DOAS                  ########"
-echo "############################################################################"
+echo "############################################################################" | lolcat
+echo "########                  REPLACING SUDO WITH DOAS                  ########" | lolcat
+echo "############################################################################" | lolcat
 
 doas -- paru -Qtdq | paru -Rns - sudo
 
-echo "############################################################################"
-echo "########                  REBOOTING YOUR SYSTEM                     ########"
-echo "############################################################################"
+echo "############################################################################" | lolcat
+echo "########                  REBOOTING YOUR SYSTEM                     ########" | lolcat
+echo "############################################################################" | lolcat
 
 reboot
