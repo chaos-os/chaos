@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+#notify
+zenity --error --text="${SMARTD_FAILTYPE} \n ${SMARTD_MESSAGE}"

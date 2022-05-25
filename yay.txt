@@ -1,12 +1,10 @@
 nerd-fonts-mononoki
 lain-git
-realvnc-vnc-viewer
 mailspring
 onlyoffice-bin
 beautyline
 nordic-theme-git
 kripton-theme-git
-diskmonitor
 lumins-bin
 powershell-bin
 appimage-cli-tool-git

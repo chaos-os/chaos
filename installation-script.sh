@@ -238,11 +238,18 @@ cp -r script-dependencies/ ~/.config
 sudo cp youtube.lua /usr/lib/vlc/lua/playlist/youtube.luac
 
 echo "############################################################################" | lolcat
-echo "########                    CONFIGURING NEOVIM                      ########" | lolcat
+echo "########                       CONFIGURING VIM                      ########" | lolcat
 echo "############################################################################" | lolcat
 
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
                          https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+git clone https://github.com/powerline/fonts
+cd fonts
+./install.sh
+cd ..
+rm -rf fonts
+sudo fc-cache -r -v
 
 echo "############################################################################" | lolcat
 echo "########                    ENABLING SERVICES                       ########" | lolcat
@@ -327,6 +334,8 @@ echo "##########################################################################
 echo "########                  REPLACING SUDO WITH DOAS                  ########" | lolcat
 echo "############################################################################" | lolcat
 
+sudo chown -c root:root /etc/doas.conf
+sudo chmod -c 0400 /etc/doas.conf
 doas -- paru -Qtdq | paru -Rns - sudo
 
 echo "############################################################################" | lolcat
