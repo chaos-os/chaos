@@ -255,11 +255,11 @@ echo "##########################################################################
 echo "########                    ENABLING SERVICES                       ########" | lolcat
 echo "############################################################################" | lolcat
 
-sudo systemctl enable --now bluetooth
-sudo systemctl enable --now alsa-state.service
-sudo systemctl enable --now alsa-restore.service
-sudo systemctl enable --now pulseaudio
-systemctl enable --user --now emacs
+sudo systemctl enable bluetooth
+sudo systemctl enable alsa-state.service
+sudo systemctl enable alsa-restore.service
+sudo systemctl enable pulseaudio
+systemctl enable --user emacs
 sudo systemctl enable reflector.service
 sudo systemctl enable reflector.timer
 sudo systemctl enable snapper-timeline.timer
@@ -270,6 +270,7 @@ sudo systemctl mask systemd-rfkill.service
 sudo systemctl mask systemd-rfkill.socket
 systemctl enable --user pipewire.service p11-kit-server.service pulseaudio.service snapd.session-agent.socket systemd-tmpfiles-clean.timer systemd-tmpfiles-setup.service
 sudo systemctl enable clamav-freshclam.service clamav-clamonacc.service clamav-daemon.service clamav-daemon.socket
+sudo systemctl enable libvirtd.service
 
 echo "---C----			          LAPTOP OR DESKTOP			              ---C----" | toilet -d /usr/share/figlet/fonts/ -f term -t -F border --rainbow
 read -p "are you running a laptop [Y/N]? " answer2
@@ -284,7 +285,7 @@ else
 fi
 
 echo "############################################################################" | lolcat
-echo "########                   INSTALLING DOOM EMACS                    ########" | lolcat
+echo "########                   INSTALLING GNU EMACS                     ########" | lolcat
 echo "############################################################################" | lolcat
 
 cd
@@ -297,18 +298,10 @@ cp -r .emacs.d/ ../
 cd
 
 echo "############################################################################" | lolcat
-echo "########                 INSTALLING NEON-BROWSER                    ########" | lolcat
-echo "############################################################################" | lolcat
-
-git clone https://gitlab.com/NEON-MMD/neon-browser.git
-cd neon-browser
-./install.sh
-
-echo "############################################################################" | lolcat
 echo "########                  ADDING USER TO GROUPS                     ########" | lolcat
 echo "############################################################################" | lolcat
 
-sudo usermod -aG kvm,vboxusers ${USER}
+sudo usermod -aG kvm,libvirt,libvirt-qemu ${USER}
 
 echo "############################################################################" | lolcat
 echo "########                      SETTING UP TPM                        ########" | lolcat

@@ -37,7 +37,12 @@ pulseaudio-alsa
 qt5ct
 tlp
 ufw
-virtualbox
+virt-manager
+qemu-desktop 
+libvirt
+edk2-ovmf 
+dnsmasq 
+iptables-nft
 xorg
 virtualbox-guest-utils
 libsecret
