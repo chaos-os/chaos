@@ -13,3 +13,4 @@ toilet
 figlet-fonts
 ncpamixer
 tabulate
+universal-android-debloater-bin
