@@ -1,4 +1,4 @@
-nerd-fonts-mononoki
+nerd-fonts-fira-code
 lain-git
 mailspring
 onlyoffice-bin
@@ -11,3 +11,5 @@ appimage-cli-tool-git
 appimagelauncher-git
 toilet
 figlet-fonts
+ncpamixer
+tabulate
