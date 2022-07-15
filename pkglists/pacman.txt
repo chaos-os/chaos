@@ -99,3 +99,4 @@ neon-os-configs-git
 neon-os-reflector
 neon-os-environment
 gtk-cyberpunk-neon-theme-git
+universal-android-debloater-git
