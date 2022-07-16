@@ -13,9 +13,9 @@ echo "---C----           adding and populating pacman-keys                ---C--
 sudo pacman-key --init
 sudo pacman-key --populate
 grep -qxF "keyserver.ubuntu.com:80" /etc/pacman.d/gnupg/gpg.conf || echo "keyserver hkp://keyserver.ubuntu.com:80" | sudo tee -a /etc/pacman.d/gnupg/gpg.conf
-    grep -qxF "keyserver.ubuntu.com:443" /etc/pacman.d/gnupg/gpg.conf || echo "keyserver hkps://keyserver.ubuntu.com:443" | sudo tee -a /etc/pacman.d/gnupg/gpg.conf
-sudo pacman-key --recv-key 6679FF690D928825
-sudo pacman-key --lsign-key 6679FF690D928825
+grep -qxF "keyserver.ubuntu.com:443" /etc/pacman.d/gnupg/gpg.conf || echo "keyserver hkps://keyserver.ubuntu.com:443" | sudo tee -a /etc/pacman.d/gnupg/gpg.conf
+sudo pacman-key --recv-key 51F9A14D1DEE561A
+sudo pacman-key --lsign-key 51F9A14D1DEE561A
 
 echo "---C----           syncing and updating repositories                ---C----" 
 sudo pacman -Syu --noconfirm --needed
