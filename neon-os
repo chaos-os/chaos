@@ -3,7 +3,7 @@
 # This is set to catch hidden bugs
 set -euo pipefail
 
-cat banner.txt
+cat etc/banner.txt
 echo ""
 echo "############################################################################" 
 echo "########                   INSTALLING NEON-OS                       ########" 
@@ -12,6 +12,8 @@ echo "##########################################################################
 echo "---C----           adding and populating pacman-keys                ---C----"  
 sudo pacman-key --init
 sudo pacman-key --populate
+grep -qxF "keyserver.ubuntu.com:80" /etc/pacman.d/gnupg/gpg.conf || echo "keyserver hkp://keyserver.ubuntu.com:80" | sudo tee -a /etc/pacman.d/gnupg/gpg.conf
+    grep -qxF "keyserver.ubuntu.com:443" /etc/pacman.d/gnupg/gpg.conf || echo "keyserver hkps://keyserver.ubuntu.com:443" | sudo tee -a /etc/pacman.d/gnupg/gpg.conf
 sudo pacman-key --recv-key 6679FF690D928825
 sudo pacman-key --lsign-key 6679FF690D928825
 
