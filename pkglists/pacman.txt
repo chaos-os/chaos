@@ -82,7 +82,6 @@ lua
 lolcat
 slock
 neon-browser-git
-stdm-git
 neon-os-scripts-git
 neon-os-paru
 neon-logout-git

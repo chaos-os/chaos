@@ -180,6 +180,7 @@ echo "##########################################################################
 
 cd 
 paru -S - < neon-os/pkglists/yay.txt --noconfirm --needed
+sudo pacman -S stdm-git --noconfirm --needed
 
 echo "---C----              Installing optimus-manager                    ---C----"
 sudo mkdir /etc/sddm.conf.d/
