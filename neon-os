@@ -205,6 +205,37 @@ cd Pictures
 git clone https://gitlab.com/dwt1/wallpapers.git
 
 echo "############################################################################"
+echo "########             CHOOSE THE TILLING WINDOW MANAGER(S)           ########"
+echo "############################################################################"
+
+read -p "do you want to install awesomewm [Y/N]? " answer20
+if [[ $answer20 == "Y" || $answer20 == "y" ]]
+then
+    echo "installing awesomewm"
+    paru -S awesome --noconfirm --needed
+else
+    echo "terminated"
+fi
+
+read -p "do you want to install qtile [Y/N]? " answer21
+if [[ $answer21 == "Y" || $answer21 == "y" ]]
+then
+    echo "installing qtile"
+    paru -S qtile --noconfirm --needed
+else
+    echo "terminated"
+fi
+
+read -p "do you want to install i3wm [Y/N]? " answer22
+if [[ $answer22 == "Y" || $answer22 == "y" ]]
+then
+    echo "installing i3wm"
+    paru -S i3-gaps i3-wm i3blocks --noconfirm --needed
+else
+    echo "terminated"
+fi
+
+echo "############################################################################"
 echo "########                  PLACING THE CONFIG FILES                  ########"
 echo "############################################################################"
 

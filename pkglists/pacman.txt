@@ -6,8 +6,6 @@ base-devel
 alsa-utils
 ark
 opendoas
-awesome
-qtile
 bluez
 bluez-utils
 brightnessctl
@@ -54,9 +52,6 @@ fd
 bat
 starship
 keepassxc
-i3-gaps
-i3-wm
-i3blocks
 filezilla
 snapper
 bleachbit
