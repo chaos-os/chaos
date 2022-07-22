@@ -115,8 +115,8 @@ then
     else
         sudo pacman -S nvidia-xrun bbswitch bbswitch-dkms --noconfirm --needed
     fi
-then
-    echo "placed Amd-Hybrid switch directory with scripts and configs in /opt/amd-hybrid-switcher"
+#then
+#    echo "placed Amd-Hybrid switch directory with scripts and configs in /opt/amd-hybrid-switcher"
 else
     echo "terminated"
 fi
@@ -138,7 +138,7 @@ else
 fi
 
 echo "---C----              Installing my packages                        ---C----"
-sudo pacman -S - < pkglists/pacman.txt --noconfirm --needed
+sudo pacman -S - < pkglists/pacman.txt --overwrite=\* --noconfirm --needed
 
 echo "---C----              running one or multiple monitors              ---C----"
 read -p "are you running multiple monitors [Y/N]? " answer3
@@ -155,7 +155,7 @@ read -p "do you want to install openssh/ssh [Y/N]? " answer10
 if [[ $answer10 == "Y" || $answer10 == "y" ]]
 then
     echo "installing openssh/ssh"
-    sudo pacman -S openssh neon-os-sshd --noconfirm --needed
+    sudo pacman -S openssh neon-os-sshd --noconfirm --needed --overwrite=\*
 else
     echo "terminated"
 fi
@@ -170,30 +170,30 @@ echo "##########################################################################
 echo "########                   ENABLING AUR AND SNAP                    ########"
 echo "############################################################################"
 
-git clone https://aur.archlinux.org/paru-bin.git
+#git clone https://aur.archlinux.org/paru-bin.git
 cd paru-bin
 makepkg -si
+sudo pacman -S neon-os-paru --noconfirm --needed --overwrite=\*
 
 echo "############################################################################"
 echo "########                   INSTALLING AUR PACKAGES                  ########"
 echo "############################################################################"
 
 cd 
-paru -S - < neon-os/pkglists/yay.txt --noconfirm --needed
+#paru -S - < neon-os/pkglists/yay.txt --noconfirm --needed
 sudo pacman -S stdm-git --noconfirm --needed
 
 echo "---C----              Installing optimus-manager                    ---C----"
-sudo mkdir /etc/sddm.conf.d/
+#sudo mkdir /etc/sddm.conf.d/
 read -p "do you want to install optimus-manager [Y/N]? " answer8
 if [[ $answer8 == "Y" || $answer8 == "y" ]]
 then
     echo "installing optimus-manager"
     paru -S optimus-manager-qt --noconfirm --needed
-    sudo mkdir /etc/optimus-manager
-    sudo pacman -S neon-os-optimus-manager neon-os-sddm-nvidia --needed --noconfirm
+    sudo pacman -S neon-os-optimus-manager neon-os-sddm-nvidia --needed --noconfirm --overwrite=\*
 else
     echo "terminated"
-    sudo pacman -S neon-os-sddm --needed --noconfirm
+    sudo pacman -S neon-os-sddm --needed --noconfirm --overwrite=\*
 fi
 
 echo "############################################################################"
@@ -201,11 +201,10 @@ echo "########               ADDING WALLPAPERS FOR neon-os                ######
 echo "############################################################################"
 
 cd
-mkdir Pictures
-mkdir .config
-sudo mkdir /usr/share/themes
+mkdir Pictures || echo ""
+sudo mkdir /usr/share/themes || echo ""
 cd Pictures
-git clone https://gitlab.com/dwt1/wallpapers.git
+git clone https://gitlab.com/dwt1/wallpapers.git || echo ""
 
 echo "############################################################################"
 echo "########             CHOOSE THE TILLING WINDOW MANAGER(S)           ########"
@@ -233,7 +232,7 @@ read -p "do you want to install i3wm [Y/N]? " answer22
 if [[ $answer22 == "Y" || $answer22 == "y" ]]
 then
     echo "installing i3wm"
-    paru -S i3-gaps i3-wm i3blocks --noconfirm --needed
+    paru -S i3-gaps i3blocks --noconfirm --needed
 else
     echo "terminated"
 fi
@@ -242,13 +241,13 @@ echo "##########################################################################
 echo "########                  PLACING THE CONFIG FILES                  ########"
 echo "############################################################################"
 
-cd /etc/neon-os-configs-git/
-sudo cp -r .config/* ~/.config/
-sudo cp -r .emacs.d ~/.config/
-cd ~/neon-os
-sudo cp -r etc/all-themes-sddm/ /usr/share/sddm/themes/
-sudo cp etc/ufetch-arch /usr/bin/
-sudo cp -r snapper-configs/* /etc/snapper/configs/
+#cd ~/neon-os
+#git clone https://gitlab.com/NEON-MMD/dotfiles.git
+#cp -rf dotfiles/.config ~/
+#cp -rf dotfiles/.emacs.d ~/
+#sudo cp -r etc/all-themes-sddm/ /usr/share/sddm/themes/
+#sudo cp etc/ufetch-arch /usr/bin/
+#sudo cp -r snapper-configs/* /etc/snapper/configs/
 
 echo "############################################################################"
 echo "########                       CONFIGURING VIM                      ########"
@@ -260,25 +259,27 @@ sudo fc-cache -r -v
 echo "############################################################################"
 echo "########                    ENABLING SERVICES                       ########"
 echo "############################################################################"
-sudo systemctl enable bluetooth
-sudo systemctl enable alsa-state.service
-sudo systemctl enable alsa-restore.service
-sudo systemctl enable pulseaudio
-sudo systemctl enable reflector.service
-sudo systemctl enable reflector.timer
-sudo systemctl enable snapper-timeline.timer
-sudo systemctl enable snapper-cleanup.timer
-sudo rcvboxdrv modprobe
-sudo timedatectl set-ntp true
-sudo systemctl mask systemd-rfkill.service
-sudo systemctl mask systemd-rfkill.socket
-systemctl enable --user pipewire.service p11-kit-server.service pulseaudio.service systemd-tmpfiles-clean.timer systemd-tmpfiles-setup.service
-sudo systemctl enable clamav-freshclam.service clamav-clamonacc.service clamav-daeme clamav-daemon.socket
-sudo systemctl enable libvirtd.service
+sudo systemctl enable bluetooth || echo ""
+sudo systemctl enable alsa-state.service || echo ""
+sudo systemctl enable alsa-restore.service || echo ""
+sudo systemctl enable pulseaudio || echo ""
+sudo systemctl enable reflector.service || echo ""
+sudo systemctl enable reflector.timer || echo ""
+sudo systemctl enable snapper-timeline.timer || echo ""
+sudo systemctl enable snapper-cleanup.timer || echo ""
+sudo rcvboxdrv modprobe || echo ""
+sudo timedatectl set-ntp true || echo ""
+sudo systemctl mask systemd-rfkill.service || echo ""
+sudo systemctl mask systemd-rfkill.socket || echo ""
+systemctl enable --user pipewire.service p11-kit-server.service pulseaudio.service systemd-tmpfiles-clean.timer systemd-tmpfiles-setup.service || echo ""
+sudo systemctl enable clamav-freshclam.service clamav-clamonacc.service clamav-daeme clamav-daemon.socket || echo ""
+sudo systemctl enable libvirtd.service || echo ""
 
+cd ~/neon-os
+sudo mkdir -p /usr/local/lib/systemd/user/
 sudo cp services/* /usr/local/lib/systemd/user/
 cd services
-systemctl enable --user emacs ssh-agent
+systemctl enable --user emacs ssh-agent || echo ""
 cd ..
 
 echo "---C----			          LAPTOP OR DESKTOP			     ---C----"
@@ -286,7 +287,7 @@ read -p "are you running a laptop [Y/N]? " answer2
 if [[ $answer2 == "y" || $answer2 == "Y" ]]
 then
     echo "enabling tlp" 
-    sudo pacman -S neon-os-tlp --noconfirm --needed
+    sudo pacman -S neon-os-tlp --noconfirm --needed --overwrite=\*
     sudo systemctl enable tlp
     sudo tlp start
 else
@@ -297,13 +298,11 @@ echo "##########################################################################
 echo "########                   INSTALLING GNU EMACS                     ########"
 echo "############################################################################"
 
-cd
-git clone https://aur.archlinux.org/emacs-git.git
-cd emacs-git
-sed -i 's/^JIT=\(     \)/JIT="YES"/' PKGBUILD
-makepkg --syncdeps --install
-cd ~/neon-os
-cp -r .emacs.d/ ../
+#cd
+#git clone https://aur.archlinux.org/emacs-git.git
+#cd emacs-git
+#sed -i 's/^JIT=\(     \)/JIT="YES"/' PKGBUILD
+#makepkg --syncdeps --install
 cd
 
 echo "############################################################################"

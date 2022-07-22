@@ -34,10 +34,7 @@ qt5ct
 tlp
 ufw
 virt-manager
-qemu-desktop 
 libvirt
-edk2-ovmf 
-dnsmasq 
 iptables-nft
 xorg
 virtualbox-guest-utils
@@ -75,7 +72,6 @@ figlet
 axel
 youtube-dl
 pass
-gpg
 vifm
 neovim
 lua
@@ -83,13 +79,11 @@ lolcat
 slock
 neon-browser-git
 neon-os-scripts-git
-neon-os-paru
 neon-logout-git
 neon-os-makepkg
 neon-os-smartd
 neon-os-reflector
 neon-os-opendoas
-neon-os-configs-git
 neon-os-reflector
 neon-os-environment
 gtk-cyberpunk-neon-theme-git
