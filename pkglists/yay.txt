@@ -17,3 +17,4 @@ universal-android-debloater-bin
 peazip-qt-bin
 nextdns-bin
 cfs-zen-tweaks
+ventoy-bin
