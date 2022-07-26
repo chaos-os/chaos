@@ -14,3 +14,6 @@ figlet-fonts
 ncpamixer
 tabulate
 universal-android-debloater-bin
+peazip-qt-bin
+nextdns-bin
+cfs-zen-tweaks

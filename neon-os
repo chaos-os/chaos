@@ -1,164 +1,258 @@
 #!/bin/env bash
 
 # This is set to catch hidden bugs
-set -euo pipefail
+# set -euox pipefail
 
 cat etc/banner.txt
-echo ""
+echo -e "\n"
+countdown () {
+    let i=10
+    while [ $i -ge 0 ]
+    do
+	echo -ne "The installation will begin in $i seconds\033[0K\r"
+	sleep 1
+	((i--))
+    done
+}
+countdown
+clear
+
+internet_connectivity_error_message()
+{
+    echo "ERROR: It seems like you are not connected to the internet, Make sure you are connected and Try again."
+    exit
+}
+
+internet_connection_check()
+{
+    ping -c 1 1.1.1.1 2> /dev/null 1> /dev/null || internet_connectivity_error_message 
+}
+
+internet_connection_check
+
 echo "############################################################################" 
 echo "########                   INSTALLING NEON-OS                       ########" 
 echo "############################################################################" 
 
-echo "---C----           adding and populating pacman-keys                ---C----"  
-sudo pacman-key --init
-sudo pacman-key --populate
-grep -qxF "keyserver.ubuntu.com:80" /etc/pacman.d/gnupg/gpg.conf || echo "keyserver hkp://keyserver.ubuntu.com:80" | sudo tee -a /etc/pacman.d/gnupg/gpg.conf
-grep -qxF "keyserver.ubuntu.com:443" /etc/pacman.d/gnupg/gpg.conf || echo "keyserver hkps://keyserver.ubuntu.com:443" | sudo tee -a /etc/pacman.d/gnupg/gpg.conf
-sudo pacman-key --recv-key 51F9A14D1DEE561A
-sudo pacman-key --lsign-key 51F9A14D1DEE561A
+keys()
+{
+    internet_connection_check
+    echo "---C----           adding and populating pacman-keys                ---C----"  
+    sudo pacman-key --init
+    sudo pacman-key --populate
+    grep -qxF "keyserver.ubuntu.com:80" /etc/pacman.d/gnupg/gpg.conf || echo "keyserver hkp://keyserver.ubuntu.com:80" | sudo tee -a /etc/pacman.d/gnupg/gpg.conf
+    grep -qxF "keyserver.ubuntu.com:443" /etc/pacman.d/gnupg/gpg.conf || echo "keyserver hkps://keyserver.ubuntu.com:443" | sudo tee -a /etc/pacman.d/gnupg/gpg.conf
+    sudo pacman-key --recv-key 51F9A14D1DEE561A
+    sudo pacman-key --lsign-key 51F9A14D1DEE561A
+}
 
-echo "---C----           syncing and updating repositories                ---C----" 
-sudo pacman -Syu --noconfirm --needed
+keys || echo "ERROR: Failed to update and add keys"
 
-echo "---C----           virtual machine or bare metal                    ---C----" 
-read -p "are you running archlinux in virtual environment [y/n]? " answer
-if [[ $answer == "y" || $answer == "Y" ]]
-then
-    echo "proceeding to install open source graphics drivers"
-    sudo pacman -S xf86-video-fbdev --noconfirm --needed
-else
-  echo "proceeding with the installation"
-fi
+sync_the_repos()
+{
+    internet_connection_check
+    echo "---C----           syncing and updating repositories                ---C----" 
+    sudo pacman -Syu --ask 4
+}
 
-echo "---C----              Configuring mirrors                           ---C----" 
-sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
-sudo pacman -S reflector rsync --noconfirm --needed
-sudo reflector -l 20 -f 5 -a 48 --sort rate --save /etc/pacman.d/mirrorlist
-sudo cp etc/pacman.conf /etc/pacman.conf
-sudo pacman -Sy neon-os-pacman --overwrite=\* --needed --noconfirm
+sync_the_repos || echo "ERROR: Failed syncing and updating the repos"
 
-echo "---C----              Installing linux kernel-headers                ---C----"
-read -p "1)linux-zen  2)linux  3)linux-lts  4)other " answer4
-if [[ $answer4 == "1" ]]
-then
-    echo "installing linux-zen-headers"
-    sudo pacman -S linux-zen-headers --noconfirm --needed
-elif [[ $answer4 == "2" ]]
-then
-    echo "installing linux-headers"
-    sudo pacman -S linux-headers --noconfirm --needed
-elif [[ $answer4 == "3" ]]
-then
-    echo "installing linux-lts-headers"
-    sudo pacman -S linux-lts-headers --noconfirm --needed
-else
-    echo "please install your custom linux headers after install"
-fi
+virtual_or_bare()
+{
+    internet_connection_check
+    echo "---C----           virtual machine or bare metal                    ---C----" 
+    read -p "are you running archlinux in virtual environment [y/n]? " answer
+    if [[ $answer == "y" || $answer == "Y" ]]
+    then
+	echo "proceeding to install open source graphics drivers"
+	sudo pacman -S xf86-video-fbdev --ask 4
+    else
+	echo "proceeding with the installation"
+    fi
+}
 
-echo "---C----             Installing Primary Gpu packages                  ---C----" 
-read -p "is one of your gpu intel [Y/N]? " answer12
-if [[ $answer12 == "Y" || $answer12 == "y" ]]
-then
-    echo "installing intel gpu driver"
-    sudo pacman -S intel-media-driver xf86-video-intel --noconfirm --needed
-else
-    echo "terminated"
-fi
+virtual_or_bare || echo "ERROR: Failed installation video driver required by virtual machines"
 
-echo "---C----             Installing Appropriate Gpu packages              ---C----" 
-read -p "1)Nvidia  2)Amd  3)Intel  4)quit " answer5
-if [[ $answer5 == "1" ]]
-then
-    echo "installing Nvidia"
+update_mirrorlists()
+{
+    internet_connection_check
+    echo "---C----              Configuring mirrors                           ---C----" 
+    sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
+    sudo pacman -S reflector rsync --ask 4
+    sudo reflector -l 20 -f 5 -a 48 --sort rate --save /etc/pacman.d/mirrorlist
+    sudo cp etc/pacman.conf /etc/pacman.conf
+    sudo pacman -Sy neon-os-pacman --overwrite=\* --ask 4
+}
+
+update_mirrorlists || echo "ERROR: Failed updating mirrorlist using reflector"
+
+kernel_headers()
+{
+    internet_connection_check
+    echo "---C----              Installing linux kernel-headers                ---C----"
+    read -p "1)linux-zen  2)linux  3)linux-lts  4)other " answer4
     if [[ $answer4 == "1" ]]
     then
-        sudo pacman -S nvidia-dkms nvidia --noconfirm --needed
+	echo "installing linux-zen-headers"
+	sudo pacman -S linux-zen-headers --ask 4
+    elif [[ $answer4 == "2" ]]
+    then
+	echo "installing linux-headers"
+	sudo pacman -S linux-headers --ask 4
+    elif [[ $answer4 == "3" ]]
+    then
+	echo "installing linux-lts-headers"
+	sudo pacman -S linux-lts-headers --ask 4
     else
-        sudo pacman -S nvidia --noconfirm --needed
+	echo "please install your custom linux headers after install"
     fi
-elif [[ $answer5 == "2" ]]
-then
-    echo "installing intel"
-    sudo pacman -S mesa --noconfirm --needed
-elif [[ $answer5 == "3" ]]
-then
-    echo "installing amd"
-    sudo pacman -S mesa mesa-vdpau --noconfirm --needed
-    read -p "1)amdgpu  2)radeon " answer11
-    if [[ $answer11 == "1" ]]
+}
+
+kernel_headers || echo "ERROR: Failed to install linux kernel headers"
+
+integrated_gpu_driver_install()
+{
+    internet_connection_check
+    echo "---C----             Installing Primary Gpu packages                  ---C----" 
+    read -p "is one of your gpu intel [Y/N]? " answer12
+    if [[ $answer12 == "Y" || $answer12 == "y" ]]
     then
-        echo "installing amdgpu"
-        sudo pacman -S xf86-video-amdgpu --noconfirm --needed
-    elif [[ $answer11 == "2" ]]
-    then
-        echo "installing radeon"
-        sudo pacman -S xf86-video-ati --noconfirm --needed
+	echo "installing intel gpu driver"
+	sudo pacman -S intel-media-driver xf86-video-intel --ask 4
     else
-        echo "terminated"
+	echo "terminated"
     fi
-else
-    echo "terminated"
-fi
+}
 
-echo "---C----              Installing Hybrid Gpu packages                   ---C----"
-read -p "1)Nvidia-hybrid  2)Amd-hybrid  3)quit " answer6
-if [[ $answer6 == "1" ]]
-then
-    echo "installing Nvidia-Hybrid"
-    read -p "1)Bumblebee  2)nvidia-prime  3)nvidia-xrun " answer7
-    if [[ $answer7 == "1" ]]
+integrated_gpu_driver_install || echo "ERROR: Failed to install integrated gpu driver"
+
+dedicated_gpu_driver_install()
+{
+    internet_connection_check
+    echo "---C----             Installing Appropriate Gpu packages              ---C----" 
+    read -p "1)Nvidia  2)Amd  3)Intel  4)quit " answer5
+    if [[ $answer5 == "1" ]]
     then
-        sudo pacman -S Bumblebee bbswitch bbswitch-dkms --noconfirm --needed
-    elif [[ $answer7 == "2" ]]
+	echo "installing Nvidia"
+	if [[ $answer4 == "1" ]]
+	then
+            sudo pacman -S nvidia-dkms nvidia --ask 4
+	else
+            sudo pacman -S nvidia --ask 4
+	fi
+    elif [[ $answer5 == "2" ]]
     then
-        sudo pacman -S nvidia-prime bbswitch bbswitch-dkms --noconfirm --needed
+	echo "installing intel"
+	sudo pacman -S mesa --ask 4
+    elif [[ $answer5 == "3" ]]
+    then
+	echo "installing amd"
+	sudo pacman -S mesa mesa-vdpau --ask 4
+	read -p "1)amdgpu  2)radeon " answer11
+	if [[ $answer11 == "1" ]]
+	then
+            echo "installing amdgpu"
+            sudo pacman -S xf86-video-amdgpu --ask 4
+	elif [[ $answer11 == "2" ]]
+	then
+            echo "installing radeon"
+            sudo pacman -S xf86-video-ati --ask 4
+	else
+            echo "terminated"
+	fi
     else
-        sudo pacman -S nvidia-xrun bbswitch bbswitch-dkms --noconfirm --needed
+	echo "terminated"
     fi
-#then
-#    echo "placed Amd-Hybrid switch directory with scripts and configs in /opt/amd-hybrid-switcher"
-else
-    echo "terminated"
-fi
+}
 
-echo "---C----              Installing Cpu Ucodes                         ---C----"
-read -p "1)Intel-ucode  2)Amd-ucode  3)quit" answer6
-if [[ $answer6 == "1" ]]
-then
-    echo "installing Intel-ucode"
-    sudo pacman -S intel-ucode
-    sudo grub-mkconfig -o /boot/grub/grub.cfg
-elif [[ $answer6 == "2" ]]
-then
-    echo "installing Amd-ucode"
-    sudo pacman -S amd-ucode
-    sudo grub-mkconfig -o /boot/grub/grub.cfg
-else
-    echo "terminated"
-fi
+dedicated_gpu_driver_install || echo "ERROR: Failed to install dedicated gpu driver"
 
+dedicated_gpu_driver_manager_install()
+{
+    internet_connection_check
+    echo "---C----              Installing Hybrid Gpu packages                   ---C----"
+    read -p "1)Nvidia-hybrid  2)Amd-hybrid  3)quit " answer6
+    if [[ $answer6 == "1" ]]
+    then
+	echo "installing Nvidia-Hybrid"
+	read -p "1)Bumblebee  2)nvidia-prime  3)nvidia-xrun " answer7
+	if [[ $answer7 == "1" ]]
+	then
+            sudo pacman -S Bumblebee bbswitch bbswitch-dkms --ask 4
+	elif [[ $answer7 == "2" ]]
+	then
+            sudo pacman -S nvidia-prime bbswitch bbswitch-dkms --ask 4
+	else
+            sudo pacman -S nvidia-xrun bbswitch bbswitch-dkms --ask 4
+	fi
+    elif [[ $answer6 == "2" ]]
+    then
+	echo "placed Amd-Hybrid switch directory with scripts and configs in /opt/amd-hybrid-switcher"
+    else
+	echo "terminated"
+    fi
+}
+
+dedicated_gpu_driver_install || echo "ERROR: Failed to install dedicated gpu driver manager"
+
+ucode_install()
+{
+    internet_connection_check
+    echo "---C----              Installing Cpu Ucodes                         ---C----"
+    echo -e "\ninstalling respective cpu ucode \nfor security reasons and for hardening \nthe system against potential computer \nviruses and malware.\n"
+    read -p "1)Intel-ucode  2)Amd-ucode  3)quit" answer6
+    if [[ $answer6 == "1" ]]
+    then
+	echo "installing Intel-ucode"
+	sudo pacman -S intel-ucode
+	sudo grub-mkconfig -o /boot/grub/grub.cfg
+    elif [[ $answer6 == "2" ]]
+    then
+	echo "installing Amd-ucode"
+	sudo pacman -S amd-ucode
+	sudo grub-mkconfig -o /boot/grub/grub.cfg
+    else
+	echo "terminated"
+    fi
+}
+
+ucode_install || echo "ERROR: Failed to install cpu ucode"
+
+internet_connection_check
 echo "---C----              Installing my packages                        ---C----"
-sudo pacman -S - < pkglists/pacman.txt --overwrite=\* --noconfirm --needed
+sudo pacman -S - < pkglists/pacman.txt --overwrite=\* --ask 4 --ask 4
 
-echo "---C----              running one or multiple monitors              ---C----"
-read -p "are you running multiple monitors [Y/N]? " answer3
-if [[ $answer3 == "Y" || $answer3 == "y" ]]
-then
-    echo "installing arandr"
-    sudo pacman -S arandr --noconfirm --needed
-else
-    echo "proceeding with the installation"
-fi
+multiple_monitors()
+{
+    internet_connection_check
+    echo "---C----              running one or multiple monitors              ---C----"
+    read -p "are you running multiple monitors [Y/N]? " answer3
+    if [[ $answer3 == "Y" || $answer3 == "y" ]]
+    then
+	echo "installing arandr"
+	sudo pacman -S arandr --ask 4
+    else
+	echo "proceeding with the installation"
+    fi
+}
 
-echo "---C----              Installing openssh/ssh                        ---C----"
-read -p "do you want to install openssh/ssh [Y/N]? " answer10
-if [[ $answer10 == "Y" || $answer10 == "y" ]]
-then
-    echo "installing openssh/ssh"
-    sudo pacman -S openssh neon-os-sshd --noconfirm --needed --overwrite=\*
-else
-    echo "terminated"
-fi
+multiple_monitors || echo "ERROR: Failed to install arandr"
+
+ssh_install()
+{
+    internet_connection_check
+    echo "---C----              Installing openssh/ssh                        ---C----"
+    read -p "do you want to install openssh/ssh [Y/N]? " answer10
+    if [[ $answer10 == "Y" || $answer10 == "y" ]]
+    then
+	echo "installing openssh/ssh"
+	sudo pacman -S openssh neon-os-sshd --ask 4 --overwrite=\*
+    else
+	echo "terminated"
+    fi
+}
+
+ssh_install || echo "ERROR: Failed to install openssh"
 
 echo "############################################################################"
 echo "########                   ADDING LOGIN MANAGER                     ########"
@@ -170,69 +264,86 @@ echo "##########################################################################
 echo "########                   ENABLING AUR AND SNAP                    ########"
 echo "############################################################################"
 
-#git clone https://aur.archlinux.org/paru-bin.git
-cd paru-bin
-makepkg -si
-sudo pacman -S neon-os-paru --noconfirm --needed --overwrite=\*
+paru_clone_install()
+{
+    internet_connection_check
+    git clone https://aur.archlinux.org/paru-bin.git
+    cd paru-bin
+}
+paru_make_install()
+{
+    paru_clone_install || cd paru-bin
+    makepkg -si
+    internet_connection_check
+    sudo pacman -S neon-os-paru --ask 4 --overwrite=\*
+}
+
+paru_make_install || echo "ERROR: Failed to install paru-bin"
 
 echo "############################################################################"
 echo "########                   INSTALLING AUR PACKAGES                  ########"
 echo "############################################################################"
 
 cd 
-#paru -S - < neon-os/pkglists/yay.txt --noconfirm --needed
-sudo pacman -S stdm-git --noconfirm --needed
+paru -S - < neon-os/pkglists/yay.txt --ask 4
+sudo pacman -S stdm-git --ask 4
 
-echo "---C----              Installing optimus-manager                    ---C----"
-#sudo mkdir /etc/sddm.conf.d/
-read -p "do you want to install optimus-manager [Y/N]? " answer8
-if [[ $answer8 == "Y" || $answer8 == "y" ]]
-then
-    echo "installing optimus-manager"
-    paru -S optimus-manager-qt --noconfirm --needed
-    sudo pacman -S neon-os-optimus-manager neon-os-sddm-nvidia --needed --noconfirm --overwrite=\*
-else
-    echo "terminated"
-    sudo pacman -S neon-os-sddm --needed --noconfirm --overwrite=\*
-fi
+optimus_manager_install()
+{
+    internet_connection_check
+    echo "---C----              Installing optimus-manager                    ---C----"
+    sudo mkdir /etc/sddm.conf.d/ || echo "ERROR: Folder already exists"
+    read -p "do you want to install optimus-manager [Y/N]? " answer8
+    if [[ $answer8 == "Y" || $answer8 == "y" ]]
+    then
+	echo "installing optimus-manager"
+	paru -S optimus-manager-qt --ask 4
+	sudo pacman -S neon-os-optimus-manager neon-os-sddm-nvidia --ask 4 --overwrite=\*
+    else
+	echo "terminated"
+	sudo pacman -S neon-os-sddm --ask 4 --overwrite=\*
+    fi
+}
+
+optimus_manager_install || echo "ERROR: Failed to install optimus-manager and sddm.conf"
 
 echo "############################################################################"
 echo "########               ADDING WALLPAPERS FOR neon-os                ########"
 echo "############################################################################"
 
 cd
-mkdir Pictures || echo ""
-sudo mkdir /usr/share/themes || echo ""
+mkdir Pictures || echo "ERROR: Folder already exists"
+sudo mkdir /usr/share/themes || echo "ERROR: Folder already exists"
 cd Pictures
-git clone https://gitlab.com/dwt1/wallpapers.git || echo ""
+git clone https://gitlab.com/dwt1/wallpapers.git || echo "ERROR: Repository folder already exists"
 
 echo "############################################################################"
 echo "########             CHOOSE THE TILLING WINDOW MANAGER(S)           ########"
 echo "############################################################################"
 
 read -p "do you want to install awesomewm [Y/N]? " answer20
-if [[ $answer20 == "Y" || $answer20 == "y" ]]
+if [[ $answer20 == "Y" || $answer20 == "y" || $answer20 == "" ]]
 then
     echo "installing awesomewm"
-    paru -S awesome --noconfirm --needed
+    paru -S awesome --ask 4
 else
     echo "terminated"
 fi
 
 read -p "do you want to install qtile [Y/N]? " answer21
-if [[ $answer21 == "Y" || $answer21 == "y" ]]
+if [[ $answer21 == "Y" || $answer21 == "y" || $answer21 == "" ]]
 then
     echo "installing qtile"
-    paru -S qtile --noconfirm --needed
+    paru -S qtile --ask 4
 else
     echo "terminated"
 fi
 
 read -p "do you want to install i3wm [Y/N]? " answer22
-if [[ $answer22 == "Y" || $answer22 == "y" ]]
+if [[ $answer22 == "Y" || $answer22 == "y" || $answer22 == "" ]]
 then
     echo "installing i3wm"
-    paru -S i3-gaps i3blocks --noconfirm --needed
+    paru -S i3-gaps i3blocks --ask 4
 else
     echo "terminated"
 fi
@@ -241,95 +352,106 @@ echo "##########################################################################
 echo "########                  PLACING THE CONFIG FILES                  ########"
 echo "############################################################################"
 
-#cd ~/neon-os
-#git clone https://gitlab.com/NEON-MMD/dotfiles.git
-#cp -rf dotfiles/.config ~/
-#cp -rf dotfiles/.emacs.d ~/
-#sudo cp -r etc/all-themes-sddm/ /usr/share/sddm/themes/
-#sudo cp etc/ufetch-arch /usr/bin/
-#sudo cp -r snapper-configs/* /etc/snapper/configs/
+cd ~/neon-os
+git clone https://gitlab.com/NEON-MMD/dotfiles.git || echo "ERROR: Repository folder already exists"
+cp -rf dotfiles/.config ~/
+cp -rf dotfiles/.emacs.d ~/
+cp -rf dotfiles/.imwheelrc ~/
+sudo cp -r etc/all-themes-sddm/ /usr/share/sddm/themes/
+sudo cp etc/ufetch-arch /usr/bin/
+sudo cp -r snapper-configs/* /etc/snapper/configs/
 
 echo "############################################################################"
 echo "########                       CONFIGURING VIM                      ########"
 echo "############################################################################"
 
-sudo pacman -S powerline-fonts-git --noconfirm --needed
+internet_connection_check
+git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim || echo "ERROR: Repository folder already exists"
+sudo pacman -S powerline-fonts-git --ask 4
 sudo fc-cache -r -v
 
 echo "############################################################################"
 echo "########                    ENABLING SERVICES                       ########"
 echo "############################################################################"
-sudo systemctl enable bluetooth || echo ""
-sudo systemctl enable alsa-state.service || echo ""
-sudo systemctl enable alsa-restore.service || echo ""
-sudo systemctl enable pulseaudio || echo ""
-sudo systemctl enable reflector.service || echo ""
-sudo systemctl enable reflector.timer || echo ""
-sudo systemctl enable snapper-timeline.timer || echo ""
-sudo systemctl enable snapper-cleanup.timer || echo ""
-sudo rcvboxdrv modprobe || echo ""
-sudo timedatectl set-ntp true || echo ""
-sudo systemctl mask systemd-rfkill.service || echo ""
-sudo systemctl mask systemd-rfkill.socket || echo ""
-systemctl enable --user pipewire.service p11-kit-server.service pulseaudio.service systemd-tmpfiles-clean.timer systemd-tmpfiles-setup.service || echo ""
-sudo systemctl enable clamav-freshclam.service clamav-clamonacc.service clamav-daeme clamav-daemon.socket || echo ""
-sudo systemctl enable libvirtd.service || echo ""
+
+sudo systemctl enable bluetooth || echo "ERROR: Failed to enable bluetooth"
+sudo systemctl enable alsa-state.service alsa-restore.service || echo "ERROR: Failed to enable alsa"
+sudo systemctl enable pulseaudio || echo "ERROR: Failed to enable pulseaudio"
+sudo systemctl enable reflector.service reflector.timer || echo "ERROR: Failed to enable reflector"
+sudo systemctl enable snapper-timeline.timer snapper-cleanup.timer || echo "ERROR: Failed to enable snapper"
+sudo timedatectl set-ntp true || echo "ERROR: Failed to set ntp time"
+sudo systemctl mask systemd-rfkill.service systemd-rfkill.socket || echo "ERROR: Failed to enable systemd-rfkill"
+systemctl enable --user pipewire.service p11-kit-server.service pulseaudio.service systemd-tmpfiles-clean.timer systemd-tmpfiles-setup.service || echo "ERROR: Failed to enable user level services"
+sudo systemctl enable clamav-freshclam.service clamav-clamonacc.service clamav-daemon.socket || echo "ERROR: Failed to enable clamav"
+sudo systemctl enable libvirtd.service || echo "ERROR: Failed to enable libvirtd"
+sudo systemctl enable set-cfs-tweaks.service || echo "ERROR: Failed to enable cfs tweaks"
+sudo systemctl enable asd.service asd-resync.service asd-resync.timer || echo "ERROR: Failed to enable anything-sync-daemon"
+sudo systemctl enable psd.service psd-resync.service || echo "ERROR: Failed to enable profile-sync-daemon"
 
 cd ~/neon-os
 sudo mkdir -p /usr/local/lib/systemd/user/
-sudo cp services/* /usr/local/lib/systemd/user/
-cd services
-systemctl enable --user emacs ssh-agent || echo ""
-cd ..
+cp services/* .config/systemd/user/
+systemctl --user daemon-reload
+systemctl enable --user emacs.service ssh-agent.service imwheel.service || echo "ERROR: Failed to enable emacs ssh and imwheel services"
 
-echo "---C----			          LAPTOP OR DESKTOP			     ---C----"
-read -p "are you running a laptop [Y/N]? " answer2
-if [[ $answer2 == "y" || $answer2 == "Y" ]]
-then
-    echo "enabling tlp" 
-    sudo pacman -S neon-os-tlp --noconfirm --needed --overwrite=\*
-    sudo systemctl enable tlp
-    sudo tlp start
-else
-    echo "proceeding with the installation"
-fi
+laptop_or_desktop()
+{
+    internet_connection_check
+    echo "---C----			          LAPTOP OR DESKTOP			     ---C----"
+    read -p "are you running a laptop [Y/N]? " answer2
+    if [[ $answer2 == "y" || $answer2 == "Y" ]]
+    then
+	echo "enabling tlp" 
+	sudo pacman -S neon-os-tlp --ask 4 --overwrite=\*
+	sudo systemctl enable tlp
+	sudo tlp start
+    else
+	echo "proceeding with the installation"
+    fi
+}
+laptop_or_desktop || echo "ERROR: Failed to install tlp"
 
 echo "############################################################################"
 echo "########                   INSTALLING GNU EMACS                     ########"
 echo "############################################################################"
 
-#cd
-#git clone https://aur.archlinux.org/emacs-git.git
-#cd emacs-git
-#sed -i 's/^JIT=\(     \)/JIT="YES"/' PKGBUILD
-#makepkg --syncdeps --install
+cd
+git clone https://aur.archlinux.org/emacs-git.git || echo "ERROR: Repo folder already exists"
+cd emacs-git
+sed -i 's/^JIT=\(     \)/JIT="YES"/' PKGBUILD
+makepkg --syncdeps --install
 cd
 
 echo "############################################################################"
 echo "########                  ADDING USER TO GROUPS                     ########"
 echo "############################################################################"
 
-sudo usermod -aG kvm,libvirt,libvirt-qemu ${USER}
+sudo usermod -aG kvm,libvirt,libvirt-qemu ${USER} || echo "ERROR: Failed to add ${USER} in kvm, libvirt & libvirt-qemu groups"
 
 echo "############################################################################"
 echo "########                      SETTING UP TPM                        ########"
 echo "############################################################################"
 
-read -p "1)TPM-1.2  2)TPM-2.0  3)Quit " answer
-if [[ $answer == "1" ]]
-then
-    echo "installing TPM-1.2"
-    paru -S tpm-tools trousers --noconfirm --needed
-    modprobe tpm
-    modprobe -a tpm_{atmel,infineon,nsc,tis,crb}
-    sudo systemctl enable tcsd.service
-elif [[ $answer == "2" ]]
-then
-    echo "installing TPM-2.0"
-    sudo pacman -S tpm2-tools --noconfirm --needed
-else
-    echo "terminated"
-fi
+tpm_install()
+{
+    internet_connection_check
+    read -p "1)TPM-1.2  2)TPM-2.0  3)Quit " answer
+    if [[ $answer == "1" ]]
+    then
+	echo "installing TPM-1.2"
+	paru -S tpm-tools trousers --ask 4
+	modprobe tpm
+	modprobe -a tpm_{atmel,infineon,nsc,tis,crb}
+	sudo systemctl enable tcsd.service
+    elif [[ $answer == "2" ]]
+    then
+	echo "installing TPM-2.0"
+	sudo pacman -S tpm2-tools --ask 4
+    else
+	echo "terminated"
+    fi
+}
+tpm_install || echo "ERROR: Failed to install tpm driver"
 
 echo "############################################################################"
 echo "########                  REPLACING SUDO WITH DOAS                  ########"

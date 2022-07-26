@@ -4,7 +4,6 @@ kitty
 alsa-firmware
 base-devel
 alsa-utils
-ark
 opendoas
 bluez
 bluez-utils
@@ -87,3 +86,8 @@ neon-os-opendoas
 neon-os-reflector
 neon-os-environment
 gtk-cyberpunk-neon-theme-git
+anything-sync-daemon
+tor
+imwheel
+qutebrowser
+profile-sync-daemon
