@@ -18,3 +18,5 @@ peazip-qt-bin
 nextdns-bin
 cfs-zen-tweaks
 ventoy-bin
+pokete-git
+raven-reader-bin

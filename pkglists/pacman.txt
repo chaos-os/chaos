@@ -91,3 +91,5 @@ tor
 imwheel
 qutebrowser
 profile-sync-daemon
+emacs-nativecomp
+cmake

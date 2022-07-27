@@ -412,17 +412,6 @@ laptop_or_desktop()
 laptop_or_desktop || echo "ERROR: Failed to install tlp"
 
 echo "############################################################################"
-echo "########                   INSTALLING GNU EMACS                     ########"
-echo "############################################################################"
-
-cd
-git clone https://aur.archlinux.org/emacs-git.git || echo "ERROR: Repo folder already exists"
-cd emacs-git
-sed -i 's/^JIT=\(     \)/JIT="YES"/' PKGBUILD
-makepkg --syncdeps --install
-cd
-
-echo "############################################################################"
 echo "########                  ADDING USER TO GROUPS                     ########"
 echo "############################################################################"
 
