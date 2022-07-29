@@ -1,67 +1,32 @@
 * Suggestions
 
-Here are some of the articles and wiki pages you should read to get increased performance, security and lower power consumption.
+Below are some of the articles and wiki pages you should read to get increased performance, security and lower power consumption.
 
-to get more performance n security out of your system read the following wiki pages👇🏻
+- https://wiki.archlinux.org/title/improving_performance
+- https://docs.kernel.org/admin-guide/mm/zswap.html
+- https://wiki.archlinux.org/title/Partitioning
+- https://superuser.com/questions/442383/why-should-i-make-a-separate-partition-for-tmp
+- https://wiki.archlinux.org/title/Kernel_module#Blacklisting
+- https://wiki.archlinux.org/title/Security
+- https://wiki.archlinux.org/title/Btrfs
+- https://btrfs.wiki.kernel.org/index.php/Compression
+- https://linuxhint.com/btrfs-filesystem-mount-options/
+- https://wiki.archlinux.org/title/Power_management#Network_interfaces
 
-1. https://wiki.archlinux.org/title/improving_performance
+* Recommendations
 
-2.
-https://docs.kernel.org/admin-guide/mm/zswap.html
+Below are some of the tweaks that I use and recommend to get performance, security and lower power consumption.
 
-3.
-https://wiki.archlinux.org/title/Partitioning
-
-4.
-https://superuser.com/questions/442383/why-should-i-make-a-separate-partition-for-tmp
-
-5.
-https://wiki.archlinux.org/title/Kernel_module#Blacklisting
-
-6.
-https://wiki.archlinux.org/title/Security
-
-7.
-https://wiki.archlinux.org/title/Btrfs
-
-8.
-https://btrfs.wiki.kernel.org/index.php/Compression
-
-9.
-https://linuxhint.com/btrfs-filesystem-mount-options/
-
-10.
-https://wiki.archlinux.org/title/Power_management#Network_interfaces
-
-read all the articles as a whole n at your pace. i hope u have a faster n performant laptop after reading this articles👆🏻
-
-what tweaks i use for performance n security
-
-1.cfs-zen-tweaks
-
-2. install cpu microcode 
-
-3. keep seperate /tmp, /var, /,  /home  partitions
-
-4. install profile-sync-daemon
-
-5. disable wake-on-lan
-
-6. disable watchdog
-
-7. use btrfs with zstd level 15 compression with autodefrag and noatime flags
-
-8. setup makepkg to use /tmp to build packages
-
-9. install anything-sync-daemon
-
-10. use linux-zen kernel
-
-11. use swap
-
-12. use /tmp partition with noexec n nosuid flags with the same size as the ram
-
-13. use zswap
-
-these are all the things i do to have increased performance on my system.
-i hope u find it helpful :).
+- cfs-zen-tweaks
+- install cpu microcode 
+- keep seperate /tmp, /var, /,  /home  partitions
+- install profile-sync-daemon
+- disable wake-on-lan
+- disable watchdog
+- use btrfs with zstd level 15 compression with autodefrag and noatime flags
+- setup makepkg to use /tmp to build packages
+- install anything-sync-daemon
+- use linux-zen kernel
+- use swap
+- use /tmp partition with noexec n nosuid flags with the same size as the ram
+- use zswap
