@@ -22,11 +22,15 @@ is *a distro for any user*.
 
 * NOTE
 
-1. neon-os is only for *x86_64 architecture* and will mot work on arm or
+- neon-os is only for *x86_64 architecture* and will mot work on arm or
 any other architectures.
 
-2. The installation-script should only be run after the base install in
+- The installation-script should only be run after the base install in
 user mode
+
+* Arch Linux installation recommendations/suggestions
+
+If you want to have increased performance, security and lower power consumption. Take a look at [[file:RECOMMENDTIONS.org][RECOMMENDATIONS.org]].
 
 * prerequisites
 
@@ -52,33 +56,33 @@ machine:
     chmod +x neon-os
     ./neon-os
 
-#+end_src>
+#+end_src
 
-* Contributing to neon-os
+* Contributing
 
-Any community contributions to the neon-os script is welcomed. Please
-consider the section below before contributing.
+Contributions are welcome. It does not matter who you are you can still contribute to the project in your way :).
 
-** Test your changes before pushing
+** Not a developer but still want to contribute
 
-It would be a good idea to keep a clean installation of an Arch-based
-distro in a virtual machine, and then clone that clean VM when you need
-to test the script. Please don't do a merge request without attempting
-to run the script in a fresh VM (one that you haven't previously ran the
-script on).
+Here is [[https://youtu.be/FccdqCucVSI][video]] by Mr. Nick on how to contribute and credit to him as well
+
+** Developer
+
+If you are developer, have a look at the [[file:CONTRIBUTING.org][CONTRIBUTING.org]] document for more information.
 
 * advice or suggestions
 
-for any advice or suggestion email us on: 1)
-slenderhacker1234@gmail.com 2) mohammed.patel19@vit.edu
+for any advice or suggestion email us on:
+
+- slenderhacker1234@gmail.com
+- mohammed.patel19@vit.edu
 
 * Post-installation
 
-** to do
+** Todo
 
-1) set the theme using lxappearance and qt5ct
-2) setting kitty theme in the kitty.conf
-3) check the aliases to use by running the following command:
+- set the theme using lxappearance
+- check the aliases to use by running the following command:
 
 #+begin_src shell
 
@@ -88,30 +92,13 @@ slenderhacker1234@gmail.com 2) mohammed.patel19@vit.edu
 
 ** common issues
 
-1) qt5ct issue "environment variable not set" to fix it run the
-   following command:
-
-#+begin_src shell
-
-  sudo cp environment /etc/
-
-#+end_src
-   
-
 * Credits
 
--Mr.Derek Taylor @gitlab.com/dwt1
-
--the lain community
-
--the arch community
-
--paru aur community
-
--awesomewm community
-
--qtile community
-
--i3 community
-
--polybar community
+- Mr.Derek Taylor @gitlab.com/dwt1
+- the lain community
+- the arch community
+- paru aur community
+- awesomewm community
+- qtile community
+- i3 community
+- polybar community
