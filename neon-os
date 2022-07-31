@@ -3,10 +3,11 @@
 # This is set to catch hidden bugs
 # set -euox pipefail
 
+clear
 cat etc/banner.txt
 echo -e "\n"
 countdown () {
-    let i=10
+    let i=3
     while [ $i -ge 0 ]
     do
 	echo -ne "The installation will begin in $i seconds\033[0K\r"
@@ -102,7 +103,7 @@ kernel_headers()
 	echo -e "1)linux-zen \n2)linux \n3)linux-lts \n4)other\n"
 	read -p "select your choice: " answer4
 	case $answer4 in
-	    "1")
+	    "1" | "")
 		echo "installing linux-zen-headers"
 		sudo pacman -S linux-zen-headers --ask 4
 		break;;
@@ -157,7 +158,7 @@ dedicated_gpu_driver_install()
 	echo -e "1)Nvidia \n2)Amd \n3)Intel \n4)quit\n"
 	read -p "Select your choice: " answer5
 	case $answer5 in
-	    "1")
+	    "1" | "")
 		echo "installing Nvidia"
 		case $answer4 in
 		    "1")
@@ -182,7 +183,7 @@ dedicated_gpu_driver_install()
 			    echo "installing amdgpu"
 			    sudo pacman -S xf86-video-amdgpu --ask 4
 			    break;;
-			"2")
+			"2" | "")
 			    echo "installing radeon"
 			    sudo pacman -S xf86-video-ati --ask 4
 			    break;;
@@ -211,7 +212,7 @@ dedicated_gpu_driver_manager_install()
 	echo -e "1)Nvidia-hybrid \n2)Amd-hybrid \n3)quit\n"
 	read -p "Select your choice: " answer6
 	case $answer6 in
-	    "1")
+	    "1" | "")
 		echo "installing Nvidia-Hybrid"
 		while :
 		do
@@ -221,7 +222,7 @@ dedicated_gpu_driver_manager_install()
 			"1")
 			    sudo pacman -S Bumblebee bbswitch bbswitch-dkms --ask 4
 			    break;;
-			"2")
+			"2" | "")
 			    sudo pacman -S nvidia-prime bbswitch bbswitch-dkms --ask 4
 			    break;;
 			"3")
@@ -255,7 +256,7 @@ ucode_install()
 	echo -e "1)Intel-ucode \n2)Amd-ucode \n3)quit\n"
 	read -p "Select your choice: " answer6
 	case $answer6 in
-	    "1")
+	    "1" | "")
 		echo "installing Intel-ucode"
 		sudo pacman -S intel-ucode
 		sudo grub-mkconfig -o /boot/grub/grub.cfg
@@ -357,7 +358,7 @@ echo "########                   INSTALLING AUR PACKAGES                  ######
 echo "############################################################################"
 
 cd 
-paru -S - < neon-os/pkglists/yay.txt --ask 4
+paru -Sy - < neon-os/pkglists/yay.txt --noredownload --ask 4 --skipreview --sudo=sudo
 sudo pacman -S stdm-git --ask 4
 
 optimus_manager_install()
@@ -400,32 +401,47 @@ echo "##########################################################################
 echo "########             CHOOSE THE TILLING WINDOW MANAGER(S)           ########"
 echo "############################################################################"
 
+yn="Y"
 while :
 do
-    echo -e "1)Awesomewm \n2)Qtile \n3)I3wm \n4)Quit \nOr press enter to install all wms\n"
-    read -p "Select your choice: " answer20
-    case $answer20 in
-	"1")
-	    echo "installing awesomewm"
-	    sudo pacman -S awesome --ask 4
-	    break;;
-	"2")
-	    echo "installing qtile"
-	    sudo pacman -S qtile --ask 4
-	    break;;
-	"3")
-	    echo "installing i3wm"
-	    sudo pacman -S i3-gaps i3blocks --ask 4
-	    break;;
-	"4")
-	    echo "terminated"
-	    break;;
-	"")
-	    echo "Installing all window managers."
-	    sudo pacman -S awesome qtile i3-gaps i3blocks --ask 4
+    case $yn in
+	"y" | "Y" | "")
+	    while :
+	    do
+		echo -e "1)Awesomewm \n2)Qtile \n3)I3wm \n4)Quit \nOr press enter to install all wms\n"
+		read -p "Select your choice: " answer20
+		case $answer20 in
+		    "1")
+			echo "installing awesomewm"
+			sudo pacman -S awesome --ask 4
+			break;;
+		    "2")
+			echo "installing qtile"
+			sudo pacman -S qtile --ask 4
+			break;;
+		    "3")
+			echo "installing i3wm"
+			sudo pacman -S i3-gaps i3blocks --ask 4
+			break;;
+		    "4")
+			echo "terminated"
+			break;;
+		    "")
+			echo "Installing all window managers."
+			sudo pacman -S awesome qtile i3-gaps i3blocks --ask 4
+			yn="N"
+			break;;
+		    *)
+			echo "Invalid answer. Please answer 1,2,3,4 or press <enter>";;
+		esac
+	    done
+	    read -p "Do you want to install another window manager [Yy/Nn]? " yn;;	    
+	"N" | "n")
+	    echo "Proceeding with the installation."
 	    break;;
 	*)
-	    echo "Invalid answer. Please answer 1,2,3,4 or press <enter>";;
+	    echo "Invalid answer. Please answer [Yy/Nn]."
+	    read -p "Do you want to install another window manager [Yy/Nn]? " yn;;	    
     esac
 done
 
@@ -438,6 +454,7 @@ git clone https://gitlab.com/NEON-MMD/dotfiles.git || echo "ERROR: Repository fo
 cp -rf dotfiles/.config ~/
 cp -rf dotfiles/.emacs.d ~/
 cp -rf dotfiles/.imwheelrc ~/
+cp -rf dotfiles/.bashrc ~/
 sudo cp -r etc/all-themes-sddm/ /usr/share/sddm/themes/
 sudo cp etc/ufetch-arch /usr/bin/
 sudo cp -r snapper-configs/* /etc/snapper/configs/
@@ -526,7 +543,7 @@ tpm_install()
 		modprobe -a tpm_{atmel,infineon,nsc,tis,crb}
 		sudo systemctl enable tcsd.service
 		break;;
-	    "2")
+	    "2" | "")
 		echo "installing TPM-2.0"
 		sudo pacman -S tpm2-tools --ask 4
 		break;;
@@ -595,6 +612,34 @@ watchdog_blacklist()
     esac
 }
 watchdog_blacklist || echo "ERROR: Failed to blacklist watchdog kernel module"
+
+echo "############################################################################"
+echo "########                CHANGING DEFAULT USER SHELL                 ########"
+echo "############################################################################"
+
+change_user_default_shell()
+{
+    while :
+    do
+	echo -e "1)Fish \n2)Bash \n3)Quit\n"
+	read -p "Select your choice: " choice
+	case $choice in
+	    "1" | "")
+		sudo usermod -s /bin/fish $USER
+		break;;
+	    "2")
+		sudo usermod -s /bin/bash $USER
+		break;;
+	    "3")
+		echo "terminated"
+		break;;
+	    *)
+		echo "Invalid answer. Please answer 1,2 or 3.";;
+	esac
+    done
+}
+
+change_user_default_shell || echo "ERROR: Failed to change default user shell."
 
 echo "############################################################################"
 echo "########                  REPLACING SUDO WITH DOAS                  ########"

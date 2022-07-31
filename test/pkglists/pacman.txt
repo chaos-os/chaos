@@ -30,7 +30,6 @@ picom
 pulseaudio
 pulseaudio-alsa
 qt5ct
-tlp
 ufw
 virt-manager
 libvirt
