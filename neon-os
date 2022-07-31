@@ -589,7 +589,7 @@ echo "##########################################################################
 
 watchdog_blacklist()
 {
-    var=`mkinitcpio -M | grep wdt`
+    var=`mkinitcpio -M | rg wdt`
     case $var in
 	"iTCO_wdt")
 	    while :
