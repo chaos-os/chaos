@@ -97,3 +97,4 @@ cmake
 pipewire
 npm
 python-feedparser
+bash-completion
