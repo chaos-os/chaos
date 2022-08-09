@@ -98,3 +98,4 @@ pipewire
 npm
 python-feedparser
 bash-completion
+imagemagick

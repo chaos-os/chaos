@@ -642,6 +642,115 @@ change_user_default_shell()
 change_user_default_shell || echo "ERROR: Failed to change default user shell."
 
 echo "############################################################################"
+echo "########                   INSTALLING A FIREWALL                    ########"
+echo "############################################################################"
+
+custom_firewall_rules()
+{
+    yn="Y"
+    while :
+    do
+	case $yn in
+	    "Y" | "y" | "")
+		read -p "Port: " port
+		echo "1)Allow \n2)Deny \n3)Limit\n"
+		read -p "Select your choice: " choice
+		while :
+		do
+		    case $choice in
+			"1" | "")
+			    sudo ufw allow $port
+			    break;;
+			"2")
+			    sudo ufw deny $port
+			    break;;
+			"3")
+			    sudo ufw limit $port
+			    break;;
+			*)
+			    "Invalid choice. Please answer 1,2 or 3.";;
+		    esac
+		done
+		read -p "Do you want to add another rule [Yy|Nn]? " yn
+		continue;;
+	    "N" | "n")
+		sudo ufw default deny incoming
+		sudo ufw default allow outgoing
+		sudo ufw enable
+		echo "Terminated."
+		break;;
+	    *)
+		echo "Invalid answer. Please answer [Yy|Nn].";;
+	esac
+    done
+}
+
+ufw_firewall_install()
+{
+    while :
+    do
+	echo "Firewall rules:"
+	echo -e "1)Developer \n2)Custom \n3)Quit\n"
+	read -p "Select your choice: " choice
+	case $choice in
+	    "1" | "")
+		echo "installing ufw and adding developer rules"
+		sudo pacman -S ufw --ask 4 --overwrite=\*
+		sudo systemctl enable ufw.service || echo "ERROR: Failed to enable ufw"
+		sudo ufw allow 53
+		sudo ufw allow 80
+		sudo ufw allow 443
+		sudo ufw allow 9050
+		sudo ufw limit 22
+		sudo ufw default deny incoming
+		sudo ufw default allow outgoing
+		sudo ufw enable
+		break;;
+	    "2")
+		echo "installing ufw and adding user defined custom rules"
+		sudo pacman -S ufw --ask 4 --overwrite=\*
+		sudo systemctl enable ufw.service || echo "ERROR: Failed to enable ufw"
+		custom_firewall_rules || echo "ERROR: Failed to set custom firewall rules."
+		break;;
+	    "3")
+		echo "Terminated."
+		break;;
+	    *)
+		echo "Invalid answer. Please answer 1,2 or 3.";;
+	esac
+    done
+}
+
+ufw_firewall_install || echo "ERROR: Failed to install ufw."
+
+echo "############################################################################"
+echo "########                    INSTALLING FAIL2BAN                     ########"
+echo "############################################################################"
+
+fail2ban_install()
+{
+    internet_connection_check
+    while :
+    do
+	read -p "do you want to install fail2ban [Yy/Nn]? " yn
+	case $yn in
+	"Y" | "y" | "")
+	    echo "installing fail2ban"
+	    sudo pacman -S fail2ban neon-os-fail2ban --ask 4 --overwrite=\*
+	    sudo systemctl enable fail2ban.service || echo "ERROR: Failed to enable fail2ban"
+	    break;;
+	"N" | "n")
+	    echo "terminated"
+	    break;;
+	*)
+	    echo "Invalid answer. Please answer [Yy/Nn].";;
+	esac
+    done
+}
+
+ssh_install || echo "ERROR: Failed to install fail2ban"
+
+echo "############################################################################"
 echo "########                  REPLACING SUDO WITH DOAS                  ########"
 echo "############################################################################"
 
