@@ -3,9 +3,15 @@
 # This is set to catch hidden bugs
 # set -euox pipefail
 
-clear
-cat etc/banner.txt
-echo -e "\n"
+cls_n_banner()
+{
+    clear
+    cat etc/banner.txt
+    echo -e "\n"
+}
+
+cls_n_banner || echo "ERROR: Failed to put banner."
+
 countdown () {
     let i=3
     while [ $i -ge 0 ]
@@ -15,7 +21,7 @@ countdown () {
 	((i--))
     done
 }
-countdown
+countdown || echo "ERROR: Failed to do countdown."
 clear
 
 internet_connectivity_error_message()
@@ -30,6 +36,8 @@ internet_connection_check()
 }
 
 internet_connection_check
+
+cls_n_banner || echo "ERROR: Failed to put banner."
 
 echo "############################################################################" 
 echo "########                   INSTALLING NEON-OS                       ########" 
@@ -51,6 +59,8 @@ keys || echo "ERROR: Failed to update and add keys"
 
 sync_the_repos()
 {
+    
+    cls_n_banner || echo "ERROR: Failed to put banner."
     internet_connection_check
     echo "---C----           syncing and updating repositories                ---C----" 
     sudo pacman -Syu --ask 4
@@ -60,6 +70,8 @@ sync_the_repos || echo "ERROR: Failed syncing and updating the repos"
 
 virtual_or_bare()
 {
+    
+    cls_n_banner || echo "ERROR: Failed to put banner."
     internet_connection_check
     echo "---C----           virtual machine or bare metal                    ---C----" 
     while :
@@ -83,6 +95,7 @@ virtual_or_bare || echo "ERROR: Failed installation video driver required by vir
 
 update_mirrorlists()
 {
+    cls_n_banner || echo "ERROR: Failed to put banner."
     internet_connection_check
     echo "---C----              Configuring mirrors                           ---C----" 
     sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
@@ -96,6 +109,7 @@ update_mirrorlists || echo "ERROR: Failed updating mirrorlist using reflector"
 
 kernel_headers()
 {
+    cls_n_banner || echo "ERROR: Failed to put banner."
     internet_connection_check
     echo "---C----              Installing linux kernel-headers                ---C----"
     while :
@@ -128,6 +142,7 @@ kernel_headers || echo "ERROR: Failed to install linux kernel headers"
 
 integrated_gpu_driver_install()
 {
+    cls_n_banner || echo "ERROR: Failed to put banner."
     internet_connection_check
     echo "---C----             Installing Primary Gpu packages                  ---C----" 
     while :
@@ -151,6 +166,7 @@ integrated_gpu_driver_install || echo "ERROR: Failed to install integrated gpu d
 
 dedicated_gpu_driver_install()
 {
+    cls_n_banner || echo "ERROR: Failed to put banner."
     internet_connection_check
     echo "---C----             Installing Appropriate Gpu packages              ---C----"
     while :
@@ -205,6 +221,7 @@ dedicated_gpu_driver_install || echo "ERROR: Failed to install dedicated gpu dri
 
 dedicated_gpu_driver_manager_install()
 {
+    cls_n_banner || echo "ERROR: Failed to put banner."
     internet_connection_check
     echo "---C----              Installing Hybrid Gpu packages                   ---C----"
     while :
@@ -249,6 +266,7 @@ dedicated_gpu_driver_install || echo "ERROR: Failed to install dedicated gpu dri
 
 ucode_install()
 {
+    cls_n_banner || echo "ERROR: Failed to put banner."
     internet_connection_check
     echo "---C----              Installing Cpu Ucodes                         ---C----"
     while :
@@ -277,12 +295,14 @@ ucode_install()
 
 ucode_install || echo "ERROR: Failed to install cpu ucode"
 
+cls_n_banner || echo "ERROR: Failed to put banner."
 internet_connection_check
 echo "---C----              Installing my packages                        ---C----"
 sudo pacman -S - < pkglists/pacman.txt --overwrite=\* --ask 4
 
 multiple_monitors()
 {
+    cls_n_banner || echo "ERROR: Failed to put banner."
     internet_connection_check
     echo "---C----              running one or multiple monitors              ---C----"
     while :
@@ -306,6 +326,7 @@ multiple_monitors || echo "ERROR: Failed to install arandr"
 
 ssh_install()
 {
+    cls_n_banner || echo "ERROR: Failed to put banner."
     internet_connection_check
     echo "---C----              Installing openssh/ssh                        ---C----"
     while :
@@ -327,12 +348,14 @@ ssh_install()
 
 ssh_install || echo "ERROR: Failed to install openssh"
 
+cls_n_banner || echo "ERROR: Failed to put banner."
 echo "############################################################################"
 echo "########                   ADDING LOGIN MANAGER                     ########"
 echo "############################################################################"
 
 sudo systemctl enable sddm.service -f
 
+cls_n_banner || echo "ERROR: Failed to put banner."
 echo "############################################################################"
 echo "########                   ENABLING AUR AND SNAP                    ########"
 echo "############################################################################"
@@ -353,6 +376,7 @@ paru_make_install()
 
 paru_make_install || echo "ERROR: Failed to install paru-bin"
 
+cls_n_banner || echo "ERROR: Failed to put banner."
 echo "############################################################################"
 echo "########                   INSTALLING AUR PACKAGES                  ########"
 echo "############################################################################"
@@ -363,6 +387,7 @@ sudo pacman -S stdm-git --ask 4
 
 optimus_manager_install()
 {
+    cls_n_banner || echo "ERROR: Failed to put banner."
     internet_connection_check
     echo "---C----              Installing optimus-manager                    ---C----"
     sudo mkdir /etc/sddm.conf.d/ || echo "ERROR: Folder already exists"
@@ -387,6 +412,7 @@ optimus_manager_install()
 
 optimus_manager_install || echo "ERROR: Failed to install optimus-manager and sddm.conf"
 
+cls_n_banner || echo "ERROR: Failed to put banner."
 echo "############################################################################"
 echo "########               ADDING WALLPAPERS FOR neon-os                ########"
 echo "############################################################################"
@@ -397,6 +423,7 @@ sudo mkdir /usr/share/themes || echo "ERROR: Folder already exists"
 cd Pictures
 git clone https://gitlab.com/dwt1/wallpapers.git || echo "ERROR: Repository folder already exists"
 
+cls_n_banner || echo "ERROR: Failed to put banner."
 echo "############################################################################"
 echo "########             CHOOSE THE TILLING WINDOW MANAGER(S)           ########"
 echo "############################################################################"
@@ -445,6 +472,7 @@ do
     esac
 done
 
+cls_n_banner || echo "ERROR: Failed to put banner."
 echo "############################################################################"
 echo "########                  PLACING THE CONFIG FILES                  ########"
 echo "############################################################################"
@@ -459,6 +487,7 @@ sudo cp -r etc/all-themes-sddm/ /usr/share/sddm/themes/
 sudo cp etc/ufetch-arch /usr/bin/
 sudo cp -r snapper-configs/* /etc/snapper/configs/
 
+cls_n_banner || echo "ERROR: Failed to put banner."
 echo "############################################################################"
 echo "########                       CONFIGURING VIM                      ########"
 echo "############################################################################"
@@ -468,6 +497,7 @@ git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvi
 sudo pacman -S powerline-fonts-git --ask 4
 sudo fc-cache -r -v
 
+cls_n_banner || echo "ERROR: Failed to put banner."
 echo "############################################################################"
 echo "########                    ENABLING SERVICES                       ########"
 echo "############################################################################"
@@ -496,6 +526,7 @@ systemctl enable --user emacs.service ssh-agent.service imwheel.service || echo 
 
 laptop_or_desktop()
 {
+    cls_n_banner || echo "ERROR: Failed to put banner."
     internet_connection_check
     echo "---C----			          LAPTOP OR DESKTOP			     ---C----"
     while :
@@ -518,12 +549,14 @@ laptop_or_desktop()
 }
 laptop_or_desktop || echo "ERROR: Failed to install tlp"
 
+cls_n_banner || echo "ERROR: Failed to put banner."
 echo "############################################################################"
 echo "########                  ADDING USER TO GROUPS                     ########"
 echo "############################################################################"
 
 sudo usermod -aG kvm,libvirt,libvirt-qemu ${USER} || echo "ERROR: Failed to add ${USER} in kvm, libvirt & libvirt-qemu groups"
 
+cls_n_banner || echo "ERROR: Failed to put banner."
 echo "############################################################################"
 echo "########                      SETTING UP TPM                        ########"
 echo "############################################################################"
@@ -557,6 +590,7 @@ tpm_install()
 }
 tpm_install || echo "ERROR: Failed to install tpm driver"
 
+cls_n_banner || echo "ERROR: Failed to put banner."
 echo "############################################################################"
 echo "########                     INSTALLING NEXTDNS                     ########"
 echo "############################################################################"
@@ -583,6 +617,7 @@ nextdns_install()
 }
 nextdns_install || echo "ERROR: Failed to install nextdns"
 
+cls_n_banner || echo "ERROR: Failed to put banner."
 echo "############################################################################"
 echo "########                    DISABLING WATCHDOGS                     ########"
 echo "############################################################################"
@@ -613,6 +648,7 @@ watchdog_blacklist()
 }
 watchdog_blacklist || echo "ERROR: Failed to blacklist watchdog kernel module"
 
+cls_n_banner || echo "ERROR: Failed to put banner."
 echo "############################################################################"
 echo "########                CHANGING DEFAULT USER SHELL                 ########"
 echo "############################################################################"
@@ -641,6 +677,7 @@ change_user_default_shell()
 
 change_user_default_shell || echo "ERROR: Failed to change default user shell."
 
+cls_n_banner || echo "ERROR: Failed to put banner."
 echo "############################################################################"
 echo "########                   INSTALLING A FIREWALL                    ########"
 echo "############################################################################"
@@ -723,6 +760,7 @@ ufw_firewall_install()
 
 ufw_firewall_install || echo "ERROR: Failed to install ufw."
 
+cls_n_banner || echo "ERROR: Failed to put banner."
 echo "############################################################################"
 echo "########                    INSTALLING FAIL2BAN                     ########"
 echo "############################################################################"
@@ -748,8 +786,9 @@ fail2ban_install()
     done
 }
 
-ssh_install || echo "ERROR: Failed to install fail2ban"
+fail2ban_install || echo "ERROR: Failed to install fail2ban"
 
+cls_n_banner || echo "ERROR: Failed to put banner."
 echo "############################################################################"
 echo "########                  REPLACING SUDO WITH DOAS                  ########"
 echo "############################################################################"
@@ -757,8 +796,27 @@ echo "##########################################################################
 sudo chown -c root:root /etc/doas.conf
 doas -- paru -Qtdq | paru -Rns - sudo
 
+cls_n_banner || echo "ERROR: Failed to put banner."
 echo "############################################################################"
 echo "########                  REBOOTING YOUR SYSTEM                     ########"
 echo "############################################################################"
 
-reboot
+reboot_or_not()
+{
+    while :
+    do
+	read -p "do you want to reboot [Yy/Nn]? " yn
+	case $yn in
+	"Y" | "y" | "")
+	    echo "rebooting the system"
+	    reboot;;
+	"N" | "n")
+	    echo "terminated"
+	    break;;
+	*)
+	    echo "Invalid answer. Please answer [Yy/Nn].";;
+	esac
+    done
+}
+
+reboot_or_not || echo "ERROR: Failed to reboot."
