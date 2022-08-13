@@ -19,3 +19,4 @@ cfs-zen-tweaks
 ventoy-bin
 pokete-git
 raven-reader-bin
+dracula-gtk-theme

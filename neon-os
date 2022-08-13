@@ -385,6 +385,40 @@ cd
 paru -Sy - < neon-os/pkglists/yay.txt --ask 4 --skipreview --sudo=sudo
 sudo pacman -S stdm-git --ask 4
 
+cls_n_banner || echo "ERROR: Failed to put banner."
+echo "############################################################################"
+echo "########                 INSTALLING COLORIZING PROGRAM              ########"
+echo "############################################################################"
+
+make_colorizing_program_manually()
+{
+    internet_connection_check
+    git clone https://github.com/cacalabs/toilet.git
+    cd toilet
+}
+
+install_colorizing_program_manually()
+{
+    make_colorizing_program_manually || cd toilet
+    ./bootstrap
+    ./configure --prefix=/usr
+    make
+    sudo cp src/toilet /usr/bin/
+}
+
+install_colorizing_program()
+{
+    internet_connection_check
+    paru -S toilet --ask 4 --skipreview --sudo=sudo
+}
+
+install_colorizing_program || install_colorizing_program_manually || echo "ERROR: Failed to install colorizing program."
+
+cls_n_banner || echo "ERROR: Failed to put banner."
+echo "############################################################################"
+echo "########                    INSTALLING OPTIMUS MANAGER              ########"
+echo "############################################################################"
+
 optimus_manager_install()
 {
     cls_n_banner || echo "ERROR: Failed to put banner."
