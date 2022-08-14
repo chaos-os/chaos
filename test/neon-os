@@ -3,10 +3,13 @@
 # This is set to catch hidden bugs
 # set -euox pipefail
 
+projdir=`pwd`
+bannerpath="$projdir/etc/banner.txt"
+
 cls_n_banner()
 {
     clear
-    cat etc/banner.txt
+    cat $bannerpath
     echo -e "\n"
 }
 
@@ -276,12 +279,12 @@ ucode_install()
 	case $answer6 in
 	    "1" | "")
 		echo "installing Intel-ucode"
-		sudo pacman -S intel-ucode
+		sudo pacman -S intel-ucode --ask 4
 		sudo grub-mkconfig -o /boot/grub/grub.cfg
 		break;;
 	    "2")
 		echo "installing Amd-ucode"
-		sudo pacman -S amd-ucode
+		sudo pacman -S amd-ucode --ask 4
 		sudo grub-mkconfig -o /boot/grub/grub.cfg
 		break;;
 	    "3")
@@ -745,9 +748,9 @@ custom_firewall_rules()
 		read -p "Do you want to add another rule [Yy|Nn]? " yn
 		continue;;
 	    "N" | "n")
+		sudo ufw enable
 		sudo ufw default deny incoming
 		sudo ufw default allow outgoing
-		sudo ufw enable
 		echo "Terminated."
 		break;;
 	    *)
