@@ -456,6 +456,7 @@ echo "##########################################################################
 
 cd
 mkdir Pictures || echo "ERROR: Folder already exists"
+mkdir Downloads || echo "ERROR: Folder already exists"
 sudo mkdir /usr/share/themes || echo "ERROR: Folder already exists"
 cd Pictures
 git clone https://gitlab.com/dwt1/wallpapers.git || echo "ERROR: Repository folder already exists"
