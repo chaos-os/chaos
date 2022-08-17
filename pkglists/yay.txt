@@ -20,3 +20,9 @@ ventoy-bin
 pokete-git
 raven-reader-bin
 dracula-gtk-theme
+sweet-dark-theme
+candy-icons-git
+material-black-colors-theme
+materialos-icon-theme-git
+solarized-dark-themes
+numix-circle-icon-theme-git
