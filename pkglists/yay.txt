@@ -26,3 +26,4 @@ material-black-colors-theme
 materialos-icon-theme-git
 solarized-dark-themes
 numix-circle-icon-theme-git
+polkit-dumb-agent
