@@ -486,7 +486,7 @@ do
 			break;;
 		    "3")
 			echo "installing i3wm"
-			sudo pacman -S i3-gaps i3blocks --ask 4
+			sudo pacman -S i3-gaps polybar --ask 4
 			break;;
 		    "4")
 			echo "terminated"
