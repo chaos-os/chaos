@@ -102,3 +102,4 @@ imagemagick
 arc-icon-theme
 arc-gtk-theme
 adapta-gtk-theme
+volumeicon
