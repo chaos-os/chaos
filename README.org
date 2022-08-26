@@ -10,15 +10,15 @@ is *a distro for any user*.
 
 ** Awesomewm
 
-[[file:images/screenshot.jpg]]
+*** Preview coming Soon
 
-** Qtile
+** Qtile (Flagship)
 
-[[file:images/screenshot2.jpg]]
+*** Preview coming Soon
 
 ** i3wm
 
-*** Coming Soon
+*** Preview coming Soon
 
 * NOTE
 
