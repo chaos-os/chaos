@@ -24,8 +24,26 @@ countdown () {
 	((i--))
     done
 }
+
 countdown || echo "ERROR: Failed to do countdown."
 clear
+
+check_root()
+{
+    if [[ `id -u` == 0 ]]
+    then
+	echo "##################################################################"
+	echo "This script MUST NOT be run as ROOT because it runs commands which"
+	echo "makes changes to the system and if ran as ROOT may potentially"
+	echo "break the system, So it is highly recommended to run it as"
+	echo "unprivileged (normal) USER. If necessory at times the script"
+	echo "will ask the user for it's sudo/doas/root password."
+	echo "##################################################################"
+	exit
+    fi
+}
+
+check_root || echo "ERROR Failed to check for root"
 
 internet_connectivity_error_message()
 {

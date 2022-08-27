@@ -1,10 +1,6 @@
 * ABOUT neon-os
 
-*neon-os* is the name that we have chosen for our pre-installation
-script which will deploy our awesome config,qtile config,fish config,
-picom config,i3 config,etc to create a proper full-fleged desktop
-experiance it is basically our desktop environment on your machine and
-is *a distro for any user*.
+*neon-os* is the name that we have chosen for our pre-installation script which will deploy our configuration files and helper scripts to create a proper full-fleged desktop experience it is basically our desktop environment on your machine.
 
 * preview
 
@@ -28,24 +24,58 @@ any other architectures.
 - The installation-script should only be run after the base install in
 user mode
 
+* What it provides out of the box
+
+** Config files
+
+- Qtile config
+- Awesomewm Config
+- I3wm config
+- Neovim config
+- Emacs config
+- etc.
+
+** Helper scripts
+
+- article-viewer-convertor --> For downloading and reading articles offline.
+- battery-notifier (For laptop users) --> For notifying if battery has reached it's limits.
+- common-websites --> Bookmarks for common websites you visit.
+- distro-updater --> For updating the system to the latest.
+- google-meet --> To make joining conference call easier.
+- gpu-hybrid-switcher --> To make switching from one gpu to another easier (Specially for AMD gpu users.).
+- search-engines --> Search through the web using the search engines you define.
+- themes-changer --> Change themes easily with this script.
+
+** Applications/Utilities
+
+- neon-podcaster --> To listen to podcast from the terminal, for more info please [[https://gitlab.com/NEON-MMD/neon-podcaster][visit.]]
+- STDM --> To making searching manual pages easier, for more info please [[https://gitlab.com/NEON-MMD/stdm][visit.]]
+- neon-logout --> Logout menu, for more info please [[https://gitlab.com/NEON-MMD/neon-logout][visit.]]
+- All the applications I use on daily basis.
+  
 * Arch Linux installation recommendations/suggestions
 
 If you want to have increased performance, security and lower power consumption. Take a look at [[file:RECOMMENDTIONS.org][RECOMMENDATIONS.org]].
 
 * prerequisites
 
-Make sure you have installed all of the following prerequisites on your
-machine:
+Make sure you have installed all of the following prerequisites on your machine:
 
-1. git
+1. Git
 
 #+begin_src shell
 
-  sudo pacman -S git
+  sudo pacman -Sy git
 
 #+end_src
 
-2. /root and /home installed on seperate disks (hdd or ssd).
+2. Grub
+
+#+begin_src shell
+
+  sudo pacman -Sy grub
+
+#+end_src
 
 * Installation
 
@@ -55,6 +85,26 @@ machine:
     cd neon-os
     chmod +x neon-os
     ./neon-os
+
+#+end_src
+
+* Updating Neon os
+
+To update neon os please run the following:
+
+** With Sudo
+
+#+begin_src shell
+
+  sudo distro-updater
+
+#+end_src
+
+** With Doas
+
+#+begin_src shell
+
+  doas -- distro-updater
 
 #+end_src
 
@@ -72,17 +122,17 @@ If you are developer, have a look at the [[file:CONTRIBUTING.org][CONTRIBUTING.o
 
 * advice or suggestions
 
-for any advice or suggestion email us on:
+For any advice or suggestion email us on:
 
-- slenderhacker1234@gmail.com
+- archlinuxpackagemaintainer@gmail.com
 - mohammed.patel19@vit.edu
 
 * Post-installation
 
 ** Todo
 
-- set the theme using lxappearance
-- check the aliases to use by running the following command:
+- Set the theme using lxappearance.
+- Check the aliases to use by running the following command:
 
 #+begin_src shell
 
@@ -90,6 +140,41 @@ for any advice or suggestion email us on:
 
 #+end_src
 
+- To setup neonvim please do the following:
+
+  - *Step 1:*
+
+    #+begin_src shell
+
+      cd .config/nvim/lua/settings/plugins
+      vim init.lua
+
+    #+end_src
+
+    - *Step 2:*
+
+      After opening it in vim save it by pressing *:w* on keyboard and wait for packer to install all the plugins required for neovim and then quit by pressing *:q* on keyboard and relaunch neovim by running:
+
+      #+begin_src shell
+
+        vim
+
+      #+end_src
+
+  Now you will have neovim setup and ready to go.
+
+- To start using emacs, just launch for the first time and wait for all the packages to install and relaunch emacs and then do the following steps to finish the setup:
+
+  - *Step 1:*
+
+    Press Alt+x on your keyboard, a popup will appear type *all-the-icons-install-fonts* and press <enter> and then it will prompt you to install some fonts press y on the keyboard.
+
+  - *Step 2:*
+
+    Press Alt+x on your keyboard and type *emojify-mode* and press <enter> and then it will prompt you to install some fonts press y on the keyboard.
+
+  Now you will have emacs setup.
+    
 ** common issues
 
 * Credits
