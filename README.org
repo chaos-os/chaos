@@ -1,8 +1,8 @@
-* ABOUT neon-os
+* ABOUT Neon-OS
 
 *neon-os* is the name that we have chosen for our pre-installation script which will deploy our configuration files and helper scripts to create a proper full-fleged desktop experience it is basically our desktop environment on your machine.
 
-* preview
+* Preview
 
 ** Awesomewm
 
