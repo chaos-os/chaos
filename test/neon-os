@@ -532,11 +532,14 @@ echo "########                  PLACING THE CONFIG FILES                  ######
 echo "############################################################################"
 
 cd ~/neon-os
-git clone https://gitlab.com/NEON-MMD/dotfiles.git || echo "ERROR: Repository folder already exists"
-cp -rf dotfiles/.config ~/
-cp -rf dotfiles/.emacs.d ~/
-cp -rf dotfiles/.imwheelrc ~/
-cp -rf dotfiles/.bashrc ~/
+sudo cp -rf /etc/neon-os/dotfiles/.config ~/
+sudo chown -R $USER ~/.config 
+sudo cp -rf /etc/neon-os/dotfiles/.emacs.d ~/
+sudo chown -R $USER ~/.emacs.d 
+sudo cp -rf /etc/neon-os/dotfiles/.imwheelrc ~/
+sudo chown $USER ~/.imwheelrc 
+sudo cp -rf /etc/neon-os/dotfiles/.bashrc ~/
+sudo chown $USER ~/.bashrc 
 sudo cp -r etc/all-themes-sddm/ /usr/share/sddm/themes/
 sudo cp etc/ufetch-arch /usr/bin/
 sudo cp -r snapper-configs/* /etc/snapper/configs/
@@ -863,7 +866,8 @@ reboot_or_not()
 	case $yn in
 	"Y" | "y" | "")
 	    echo "rebooting the system"
-	    reboot;;
+	    reboot
+	    break;;
 	"N" | "n")
 	    echo "terminated"
 	    break;;
