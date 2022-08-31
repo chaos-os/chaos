@@ -403,7 +403,7 @@ echo "########                   INSTALLING AUR PACKAGES                  ######
 echo "############################################################################"
 
 cd 
-sudo aura -Axa - < neon-os/pkglists/yay.txt --ask 4
+sudo aura -Axa - < neon-os/pkglists/yay.txt --noconfirm --overwrite=\*
 sudo pacman -S stdm-git --ask 4
 
 cls_n_banner || echo "ERROR: Failed to put banner."
@@ -430,7 +430,7 @@ install_colorizing_program_manually()
 install_colorizing_program()
 {
     internet_connection_check
-    sudo aura -Axa toilet --ask 4
+    sudo aura -Axa toilet --noconfirm --overwrite=\*
 }
 
 install_colorizing_program || install_colorizing_program_manually || echo "ERROR: Failed to install colorizing program."
@@ -452,7 +452,7 @@ optimus_manager_install()
 	case $answer8 in
 	    "Y" | "y" | "")
 		echo "installing optimus-manager"
-		sudo aura -Axa optimus-manager-qt --ask 4
+		sudo aura -Axa optimus-manager-qt --noconfirm --overwrite=\*
 		sudo pacman -S neon-os-optimus-manager neon-os-sddm-nvidia --ask 4 --overwrite=\*
 		break;;
 	    "N" | "n")
@@ -628,7 +628,7 @@ tpm_install()
 	case $answer in
 	    "1")
 		echo "installing TPM-1.2"
-		sudo aura -Axa tpm-tools trousers --ask 4
+		sudo aura -Axa tpm-tools trousers --noconfirm --overwrite=\*
 		modprobe tpm
 		modprobe -a tpm_{atmel,infineon,nsc,tis,crb}
 		sudo systemctl enable tcsd.service
@@ -661,7 +661,7 @@ nextdns_install()
 	case $yn in
 	    "Y" | "y" | "")
 		echo "installing nextdns"
-		sudo aura -Axa nextdns-bin --ask 4
+		sudo aura -Axa nextdns-bin --noconfirm --overwrite=\*
 		sudo sh -c "$(curl -sL https://nextdns.io/install)"
 		break;;
 	    "N" | "n")
