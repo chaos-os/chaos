@@ -381,21 +381,21 @@ echo "##########################################################################
 echo "########                   ENABLING AUR AND SNAP                    ########"
 echo "############################################################################"
 
-paru_clone_install()
+aura_clone_install()
 {
     internet_connection_check
-    git clone https://aur.archlinux.org/paru-bin.git
-    cd paru-bin
+    git clone https://aur.archlinux.org/aura-bin.git
+    cd aura-bin
 }
-paru_make_install()
+aura_make_install()
 {
-    paru_clone_install || cd paru-bin
+    aura_clone_install || cd aura-bin
     makepkg -si
     internet_connection_check
-    sudo pacman -S neon-os-paru --ask 4 --overwrite=\*
+    sudo pacman -S neon-os-aura --ask 4 --overwrite=\*
 }
 
-paru_make_install || echo "ERROR: Failed to install paru-bin"
+aura_make_install || echo "ERROR: Failed to install aura-bin"
 
 cls_n_banner || echo "ERROR: Failed to put banner."
 echo "############################################################################"
@@ -403,7 +403,7 @@ echo "########                   INSTALLING AUR PACKAGES                  ######
 echo "############################################################################"
 
 cd 
-paru -Sy - < neon-os/pkglists/yay.txt --ask 4 --skipreview --sudo=sudo
+sudo aura -Axa - < neon-os/pkglists/yay.txt --ask 4
 sudo pacman -S stdm-git --ask 4
 
 cls_n_banner || echo "ERROR: Failed to put banner."
@@ -430,7 +430,7 @@ install_colorizing_program_manually()
 install_colorizing_program()
 {
     internet_connection_check
-    paru -S toilet --ask 4 --skipreview --sudo=sudo
+    sudo aura -Axa toilet --ask 4
 }
 
 install_colorizing_program || install_colorizing_program_manually || echo "ERROR: Failed to install colorizing program."
@@ -452,7 +452,7 @@ optimus_manager_install()
 	case $answer8 in
 	    "Y" | "y" | "")
 		echo "installing optimus-manager"
-		paru -S optimus-manager-qt --ask 4 --sudo=sudo --skipreview
+		sudo aura -Axa optimus-manager-qt --ask 4
 		sudo pacman -S neon-os-optimus-manager neon-os-sddm-nvidia --ask 4 --overwrite=\*
 		break;;
 	    "N" | "n")
@@ -628,7 +628,7 @@ tpm_install()
 	case $answer in
 	    "1")
 		echo "installing TPM-1.2"
-		paru -S tpm-tools trousers --ask 4 --sudo=sudo --skipreview
+		sudo aura -Axa tpm-tools trousers --ask 4
 		modprobe tpm
 		modprobe -a tpm_{atmel,infineon,nsc,tis,crb}
 		sudo systemctl enable tcsd.service
@@ -661,7 +661,7 @@ nextdns_install()
 	case $yn in
 	    "Y" | "y" | "")
 		echo "installing nextdns"
-		paru -S nextdns-bin --ask 4 --sudo=sudo --skipreview
+		sudo aura -Axa nextdns-bin --ask 4
 		sudo sh -c "$(curl -sL https://nextdns.io/install)"
 		break;;
 	    "N" | "n")
@@ -845,13 +845,20 @@ fail2ban_install()
 
 fail2ban_install || echo "ERROR: Failed to install fail2ban"
 
+# cls_n_banner || echo "ERROR: Failed to put banner."
+# echo "############################################################################"
+# echo "########                  REPLACING SUDO WITH DOAS                  ########"
+# echo "############################################################################"
+
+# sudo chown -c root:root /etc/doas.conf
+# doas -- paru -Qtdq | paru -Rns - sudo
+
 cls_n_banner || echo "ERROR: Failed to put banner."
 echo "############################################################################"
-echo "########                  REPLACING SUDO WITH DOAS                  ########"
+echo "########                   SETTING UP DOAS                          ########"
 echo "############################################################################"
 
 sudo chown -c root:root /etc/doas.conf
-doas -- paru -Qtdq | paru -Rns - sudo
 
 cls_n_banner || echo "ERROR: Failed to put banner."
 echo "############################################################################"
