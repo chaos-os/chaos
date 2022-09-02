@@ -1,5 +1,11 @@
 adobe-source-code-pro-fonts
 ttf-ubuntu-font-family
+otf-font-awesome
+ttf-joypixels
+stylua
+python-black
+prettier
+lua-language-server
 kitty
 alsa-firmware
 base-devel
