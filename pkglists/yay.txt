@@ -8,7 +8,7 @@ kripton-theme-git
 lumins-bin
 powershell-bin
 appimage-cli-tool-git
-appimagelauncher-git
+appimagelauncher
 toilet
 figlet-fonts
 ncpamixer
@@ -17,7 +17,7 @@ universal-android-debloater-bin
 peazip-qt-bin
 cfs-zen-tweaks
 ventoy-bin
-pokete-git
+pokete
 raven-reader-bin
 dracula-gtk-theme
 sweet-dark-theme
