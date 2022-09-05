@@ -53,7 +53,7 @@ internet_connectivity_error_message()
 
 internet_connection_check()
 {
-    ping -q -w 1 -c 1 `ip r | grep default | cut -d ' ' -f 3` 2>/dev/null 1>/dev/null || internet_connectivity_error_message 
+    ping -c 1 1.1.1.1  2>/dev/null 1>/dev/null || internet_connectivity_error_message 
 }
 
 internet_connection_check
@@ -66,7 +66,7 @@ echo "##########################################################################
 
 keys()
 {
-    internet_connection_check
+    # internet_connection_check
     echo "---C----           adding and populating pacman-keys                ---C----"  
     sudo pacman-key --init
     sudo pacman-key --populate
@@ -82,7 +82,7 @@ sync_the_repos()
 {
     
     cls_n_banner || echo "ERROR: Failed to put banner."
-    internet_connection_check
+    # internet_connection_check
     echo "---C----           syncing and updating repositories                ---C----" 
     sudo pacman -Syu --ask 4
 }
@@ -93,7 +93,7 @@ virtual_or_bare()
 {
     
     cls_n_banner || echo "ERROR: Failed to put banner."
-    internet_connection_check
+    # internet_connection_check
     echo "---C----           virtual machine or bare metal                    ---C----" 
     while :
     do
@@ -117,7 +117,7 @@ virtual_or_bare || echo "ERROR: Failed installation video driver required by vir
 update_mirrorlists()
 {
     cls_n_banner || echo "ERROR: Failed to put banner."
-    internet_connection_check
+    # internet_connection_check
     echo "---C----              Configuring mirrors                           ---C----" 
     sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
     sudo pacman -S reflector rsync --ask 4
@@ -131,7 +131,7 @@ update_mirrorlists || echo "ERROR: Failed updating mirrorlist using reflector"
 kernel_headers()
 {
     cls_n_banner || echo "ERROR: Failed to put banner."
-    internet_connection_check
+    # internet_connection_check
     echo "---C----              Installing linux kernel-headers                ---C----"
     while :
     do
@@ -164,7 +164,7 @@ kernel_headers || echo "ERROR: Failed to install linux kernel headers"
 integrated_gpu_driver_install()
 {
     cls_n_banner || echo "ERROR: Failed to put banner."
-    internet_connection_check
+    # internet_connection_check
     echo "---C----             Installing Primary Gpu packages                  ---C----" 
     while :
     do
@@ -188,7 +188,7 @@ integrated_gpu_driver_install || echo "ERROR: Failed to install integrated gpu d
 dedicated_gpu_driver_install()
 {
     cls_n_banner || echo "ERROR: Failed to put banner."
-    internet_connection_check
+    # internet_connection_check
     echo "---C----             Installing Appropriate Gpu packages              ---C----"
     while :
     do
@@ -243,7 +243,7 @@ dedicated_gpu_driver_install || echo "ERROR: Failed to install dedicated gpu dri
 dedicated_gpu_driver_manager_install()
 {
     cls_n_banner || echo "ERROR: Failed to put banner."
-    internet_connection_check
+    # internet_connection_check
     echo "---C----              Installing Hybrid Gpu packages                   ---C----"
     while :
     do
@@ -288,7 +288,7 @@ dedicated_gpu_driver_install || echo "ERROR: Failed to install dedicated gpu dri
 ucode_install()
 {
     cls_n_banner || echo "ERROR: Failed to put banner."
-    internet_connection_check
+    # internet_connection_check
     echo "---C----              Installing Cpu Ucodes                         ---C----"
     while :
     do
@@ -317,14 +317,14 @@ ucode_install()
 ucode_install || echo "ERROR: Failed to install cpu ucode"
 
 cls_n_banner || echo "ERROR: Failed to put banner."
-internet_connection_check
+# internet_connection_check
 echo "---C----              Installing my packages                        ---C----"
 sudo pacman -S - < pkglists/pacman.txt --overwrite=\* --ask 4
 
 multiple_monitors()
 {
     cls_n_banner || echo "ERROR: Failed to put banner."
-    internet_connection_check
+    # internet_connection_check
     echo "---C----              running one or multiple monitors              ---C----"
     while :
     do
@@ -348,7 +348,7 @@ multiple_monitors || echo "ERROR: Failed to install arandr"
 ssh_install()
 {
     cls_n_banner || echo "ERROR: Failed to put banner."
-    internet_connection_check
+    # internet_connection_check
     echo "---C----              Installing openssh/ssh                        ---C----"
     while :
     do
@@ -383,7 +383,7 @@ echo "##########################################################################
 
 paru_clone_install()
 {
-    internet_connection_check
+    # internet_connection_check
     git clone https://aur.archlinux.org/paru-bin.git
     cd paru-bin
 }
@@ -392,7 +392,7 @@ paru_make_install()
 {
     paru_clone_install || cd paru-bin
     makepkg -si
-    internet_connection_check
+    # internet_connection_check
     sudo pacman -S neon-os-paru --ask 4 --overwrite=\*
 }
 
@@ -414,7 +414,7 @@ echo "##########################################################################
 
 make_colorizing_program_manually()
 {
-    internet_connection_check
+    # internet_connection_check
     git clone https://github.com/cacalabs/toilet.git
     cd toilet
 }
@@ -430,7 +430,7 @@ install_colorizing_program_manually()
 
 install_colorizing_program()
 {
-    internet_connection_check
+    # internet_connection_check
     paru -S toilet --ask 4 --overwrite=\*
 }
 
@@ -444,7 +444,7 @@ echo "##########################################################################
 optimus_manager_install()
 {
     cls_n_banner || echo "ERROR: Failed to put banner."
-    internet_connection_check
+    # internet_connection_check
     echo "---C----              Installing optimus-manager                    ---C----"
     sudo mkdir /etc/sddm.conf.d/ || echo "ERROR: Folder already exists"
     while :
@@ -550,7 +550,7 @@ echo "##########################################################################
 echo "########                       CONFIGURING VIM                      ########"
 echo "############################################################################"
 
-internet_connection_check
+# internet_connection_check
 git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim || echo "ERROR: Repository folder already exists"
 sudo pacman -S powerline-fonts-git --ask 4
 sudo fc-cache -r -v
@@ -585,7 +585,7 @@ systemctl enable --user emacs.service ssh-agent.service imwheel.service || echo 
 laptop_or_desktop()
 {
     cls_n_banner || echo "ERROR: Failed to put banner."
-    internet_connection_check
+    # internet_connection_check
     echo "---C----			          LAPTOP OR DESKTOP			     ---C----"
     while :
     do
@@ -621,7 +621,7 @@ echo "##########################################################################
 
 tpm_install()
 {
-    internet_connection_check
+    # internet_connection_check
     while :
     do
 	echo -e "1)TPM-1.2 \n2)TPM-2.0 \n3)Quit\n"
@@ -655,7 +655,7 @@ echo "##########################################################################
 
 nextdns_install()
 {
-    internet_connection_check
+    # internet_connection_check
     while :
     do
 	read -p "do you want to install nextdns [Yy/Nn]? " yn
@@ -825,7 +825,7 @@ echo "##########################################################################
 
 fail2ban_install()
 {
-    internet_connection_check
+    # internet_connection_check
     while :
     do
 	read -p "do you want to install fail2ban [Yy/Nn]? " yn
