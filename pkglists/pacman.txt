@@ -117,3 +117,4 @@ volumeicon
 adwaita-qt5
 oxygen
 breeze
+xclip
