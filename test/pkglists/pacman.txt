@@ -73,6 +73,7 @@ nodejs
 privoxy
 pyqt5
 python-pip
+python-setuptools
 figlet
 axel
 youtube-dl
