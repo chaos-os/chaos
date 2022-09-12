@@ -88,21 +88,43 @@ Make sure you have installed all of the following prerequisites on your machine:
 
 * Updating Neon OS
 
-To update neon os please run the following:
-
-** With Sudo
+Before running the following commands make sure to backup your config by running the following commands:
 
 #+begin_src shell
 
-  sudo distro-updater
+  cd ~
+  mv .config .config.bak
+  mv .emacs.d/init.el .emacs.d/init.el.bak
+  mv .emacs.d/modules .emacs.d/modules.bak
+  mv .imwheelrc .imwheelrc.bak
+  mv .bashrc .bashrc.bak
 
 #+end_src
 
-** With Doas
+Then run the following commands to update your system:
 
 #+begin_src shell
 
-  doas -- distro-updater
+  cd /etc/neon-os/dotfiles/
+  sudo cp .config/ ~/
+  sudo cp .emacs.d/init.el ~/.emacs.d/
+  sudo cp .imwheelrc ~/
+  sudo cp .bashrc ~/
+
+  cd ~
+  sudo chown -R $USER .config/
+  sudo chown -R $USER .emacs.d/modules
+  sudo chown $USER .emacs.d/init.el
+  sudo chown $USER .imwheelrc
+  sudo chown $USER .bashrc
+
+#+end_src
+
+Then run the following command to install packages neccesory for thr update:
+
+#+begin_src shell
+
+  distro-updater
 
 #+end_src
 
@@ -145,28 +167,13 @@ For any advice or suggestion email us on:
 
 #+end_src
 
-- To setup neonvim please do the following:
+*** Neovim 
 
-  - *Step 1:*
+- To get vim setup launch neovim and wait for all the plugins to get installed and relaunch if neccessory.
 
-    #+begin_src shell
+Now you will have neovim setup.
 
-      cd .config/nvim/lua/settings/plugins
-      vim init.lua
-
-    #+end_src
-
-  - *Step 2:*
-
-      After opening it in vim save it by pressing *:w* on keyboard and wait for packer to install all the plugins required for neovim and then quit by pressing *:q* on keyboard and relaunch neovim by running:
-
-      #+begin_src shell
-
-        vim
-
-      #+end_src
-
-  Now you will have neovim setup and ready to go.
+*** Emacs
 
 - To start using emacs, just launch for the first time and wait for all the packages to install and relaunch emacs and then do the following steps to finish the setup:
 
@@ -178,9 +185,28 @@ For any advice or suggestion email us on:
 
     Press Alt+x on your keyboard and type *emojify-mode* and press <enter> and then it will prompt you to install some fonts press y on the keyboard.
 
-  Now you will have emacs setup.
-    
+Now you will have emacs setup.
+
+*NOTE:* Before launching emacs for the first time make sure you do not have emacs running as a daemon.
+
+To stop emacs from running in daemon run the following command:
+
+#+begin_src shell
+
+  ustop emacs.service
+
+#+end_src
+
+or
+
+#+begin_src shell
+
+  systemctl stop --user emacs.service
+
+#+end_src
+
 ** common issues
+
 
 * Credits
 
