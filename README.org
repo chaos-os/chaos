@@ -121,7 +121,7 @@ Then run the following commands to update your system:
 
 #+end_src
 
-Then run the following command to install packages neccesory for thr update:
+Then run the following command to install packages neccesory for the update:
 
 #+begin_src shell
 
@@ -170,7 +170,7 @@ For any advice or suggestion email us on:
 
 *** Neovim 
 
-- To get vim setup launch neovim and wait for all the plugins to get installed and relaunch if neccessory.
+- To get vim setup launch neovim, ignore all the errors by pressing <enter> on your keyboard and wait for all the plugins to get installed and relaunch if neccessory.
 
 Now you will have neovim setup.
 
