@@ -106,8 +106,9 @@ Then run the following commands to update your system:
 #+begin_src shell
 
   cd /etc/neon-os/dotfiles/
-  sudo cp .config/ ~/
+  sudo cp -rf .config/ ~/
   sudo cp .emacs.d/init.el ~/.emacs.d/
+  sudo cp -rf .emacs.d/modules ~/.emacs.d/modules
   sudo cp .imwheelrc ~/
   sudo cp .bashrc ~/
 
