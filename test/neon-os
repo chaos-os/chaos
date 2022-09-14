@@ -3,315 +3,325 @@
 # This is set to catch hidden bugs
 # set -euox pipefail
 
-projdir=`pwd`
+projdir=$(pwd)
 bannerpath="$projdir/etc/banner.txt"
 
-cls_n_banner()
-{
-    clear
-    cat $bannerpath
-    echo -e "\n"
+cls_n_banner() {
+	clear
+	cat $bannerpath
+	echo -e "\n"
 }
 
 cls_n_banner || echo "ERROR: Failed to put banner."
 
-countdown () {
-    let i=3
-    while [ $i -ge 0 ]
-    do
-	echo -ne "The installation will begin in $i seconds\033[0K\r"
-	sleep 1
-	((i--))
-    done
+countdown() {
+	let i=3
+	while [ $i -ge 0 ]; do
+		echo -ne "The installation will begin in $i seconds\033[0K\r"
+		sleep 1
+		((i--))
+	done
 }
 
 countdown || echo "ERROR: Failed to do countdown."
 clear
 
-check_root()
-{
-    if [[ `id -u` == 0 ]]
-    then
-	echo "##################################################################"
-	echo "This script MUST NOT be run as ROOT because it runs commands which"
-	echo "makes changes to the system and if ran as ROOT may potentially"
-	echo "break the system, So it is highly recommended to run it as"
-	echo "unprivileged (normal) USER. If necessory at times the script"
-	echo "will ask the user for it's sudo/doas/root password."
-	echo "##################################################################"
-	exit
-    fi
+check_root() {
+	if [[ $(id -u) == 0 ]]; then
+		echo "##################################################################"
+		echo "This script MUST NOT be run as ROOT because it runs commands which"
+		echo "makes changes to the system and if ran as ROOT may potentially"
+		echo "break the system, So it is highly recommended to run it as"
+		echo "unprivileged (normal) USER. If necessory at times the script"
+		echo "will ask the user for it's sudo/doas/root password."
+		echo "##################################################################"
+		exit
+	fi
 }
 
 check_root || echo "ERROR Failed to check for root"
 
-internet_connectivity_error_message()
-{
-    echo "ERROR: It seems like you are not connected to the internet, Make sure you are connected and Try again."
-    exit
+internet_connectivity_error_message() {
+	echo "ERROR: It seems like you are not connected to the internet, Make sure you are connected and Try again."
+	exit
 }
 
-internet_connection_check()
-{
-    ping -c 1 1.1.1.1  2>/dev/null 1>/dev/null || internet_connectivity_error_message 
+internet_connection_check() {
+	ping -c 1 1.1.1.1 2>/dev/null 1>/dev/null || internet_connectivity_error_message
 }
 
 internet_connection_check
 
 cls_n_banner || echo "ERROR: Failed to put banner."
 
-echo "############################################################################" 
-echo "########                   INSTALLING NEON-OS                       ########" 
-echo "############################################################################" 
+echo "############################################################################"
+echo "########                   INSTALLING NEON-OS                       ########"
+echo "############################################################################"
 
-keys()
-{
-    # internet_connection_check
-    echo "---C----           adding and populating pacman-keys                ---C----"  
-    sudo pacman-key --init
-    sudo pacman-key --populate
-    grep -qxF "keyserver.ubuntu.com:80" /etc/pacman.d/gnupg/gpg.conf || echo "keyserver hkp://keyserver.ubuntu.com:80" | sudo tee -a /etc/pacman.d/gnupg/gpg.conf
-    grep -qxF "keyserver.ubuntu.com:443" /etc/pacman.d/gnupg/gpg.conf || echo "keyserver hkps://keyserver.ubuntu.com:443" | sudo tee -a /etc/pacman.d/gnupg/gpg.conf
-    sudo pacman-key --recv-key 51F9A14D1DEE561A
-    sudo pacman-key --lsign-key 51F9A14D1DEE561A
+keys() {
+	# internet_connection_check
+	echo "---C----           adding and populating pacman-keys                ---C----"
+	sudo pacman-key --init
+	sudo pacman-key --populate
+	grep -qxF "keyserver.ubuntu.com:80" /etc/pacman.d/gnupg/gpg.conf || echo "keyserver hkp://keyserver.ubuntu.com:80" | sudo tee -a /etc/pacman.d/gnupg/gpg.conf
+	grep -qxF "keyserver.ubuntu.com:443" /etc/pacman.d/gnupg/gpg.conf || echo "keyserver hkps://keyserver.ubuntu.com:443" | sudo tee -a /etc/pacman.d/gnupg/gpg.conf
+	sudo pacman-key --recv-key 51F9A14D1DEE561A
+	sudo pacman-key --lsign-key 51F9A14D1DEE561A
 }
 
 keys || echo "ERROR: Failed to update and add keys"
 
-sync_the_repos()
-{
-    
-    cls_n_banner || echo "ERROR: Failed to put banner."
-    # internet_connection_check
-    echo "---C----           syncing and updating repositories                ---C----" 
-    sudo pacman -Syu --ask 4
+sync_the_repos() {
+
+	cls_n_banner || echo "ERROR: Failed to put banner."
+	# internet_connection_check
+	echo "---C----           syncing and updating repositories                ---C----"
+	sudo pacman -Syu --ask 4
 }
 
 sync_the_repos || echo "ERROR: Failed syncing and updating the repos"
 
-virtual_or_bare()
-{
-    
-    cls_n_banner || echo "ERROR: Failed to put banner."
-    # internet_connection_check
-    echo "---C----           virtual machine or bare metal                    ---C----" 
-    while :
-    do
-	read -p "are you running archlinux in virtual environment [Yy/Nn]? " answer
-	case $answer in
-	    "" | "Y" | "y")
-		echo "proceeding to install open source graphics drivers"
-		sudo pacman -S xf86-video-fbdev --ask 4
-		break;;
-	    "N" | "n" )
-		echo "proceeding with the installation"
-		break;;
-	    *)
-		echo "Invalid answer. Please answer [Yy/Nn]"
-	esac
-    done
+virtual_or_bare() {
+
+	cls_n_banner || echo "ERROR: Failed to put banner."
+	# internet_connection_check
+	echo "---C----           virtual machine or bare metal                    ---C----"
+	while :; do
+		read -p "are you running archlinux in virtual environment [Yy/Nn]? " answer
+		case $answer in
+		"" | "Y" | "y")
+			echo "proceeding to install open source graphics drivers"
+			sudo pacman -S xf86-video-fbdev --ask 4
+			break
+			;;
+		"N" | "n")
+			echo "proceeding with the installation"
+			break
+			;;
+		*)
+			echo "Invalid answer. Please answer [Yy/Nn]"
+			;;
+		esac
+	done
 }
 
 virtual_or_bare || echo "ERROR: Failed installation video driver required by virtual machines"
 
-update_mirrorlists()
-{
-    cls_n_banner || echo "ERROR: Failed to put banner."
-    # internet_connection_check
-    echo "---C----              Configuring mirrors                           ---C----" 
-    sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
-    sudo pacman -S reflector rsync --ask 4
-    sudo reflector -l 20 -f 5 -a 48 --sort rate --save /etc/pacman.d/mirrorlist
-    sudo cp etc/pacman.conf /etc/pacman.conf
-    sudo pacman -Sy neon-os-pacman --overwrite=\* --ask 4
+update_mirrorlists() {
+	cls_n_banner || echo "ERROR: Failed to put banner."
+	# internet_connection_check
+	echo "---C----              Configuring mirrors                           ---C----"
+	sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
+	sudo pacman -S reflector rsync --ask 4
+	sudo reflector -l 20 -f 5 -a 48 --sort rate --save /etc/pacman.d/mirrorlist
+	sudo cp etc/pacman.conf /etc/pacman.conf
+	sudo pacman -Sy neon-os-pacman --overwrite=\* --ask 4
 }
 
 update_mirrorlists || echo "ERROR: Failed updating mirrorlist using reflector"
 
-kernel_headers()
-{
-    cls_n_banner || echo "ERROR: Failed to put banner."
-    # internet_connection_check
-    echo "---C----              Installing linux kernel-headers                ---C----"
-    while :
-    do
-	echo -e "1)linux-zen \n2)linux \n3)linux-lts \n4)other\n"
-	read -p "select your choice: " answer4
-	case $answer4 in
-	    "1" | "")
-		echo "installing linux-zen-headers"
-		sudo pacman -S linux-zen-headers --ask 4
-		break;;
-	    "2")
-		echo "installing linux-headers"
-		sudo pacman -S linux-headers --ask 4
-		break;;
-	    "3")
-		echo "installing linux-lts-headers"
-		sudo pacman -S linux-lts-headers --ask 4
-		break;;
-	    "4")
-		echo "please install your custom linux headers after install"
-		break;;
-	    *)
-		echo "Invalid answer. Please answer 1,2,3 or 4."
-	esac
-    done
+kernel_headers() {
+	cls_n_banner || echo "ERROR: Failed to put banner."
+	# internet_connection_check
+	echo "---C----              Installing linux kernel-headers                ---C----"
+	while :; do
+		echo -e "1)linux-zen \n2)linux \n3)linux-lts \n4)other\n"
+		read -p "select your choice: " answer4
+		case $answer4 in
+		"1" | "")
+			echo "installing linux-zen-headers"
+			sudo pacman -S linux-zen-headers --ask 4
+			break
+			;;
+		"2")
+			echo "installing linux-headers"
+			sudo pacman -S linux-headers --ask 4
+			break
+			;;
+		"3")
+			echo "installing linux-lts-headers"
+			sudo pacman -S linux-lts-headers --ask 4
+			break
+			;;
+		"4")
+			echo "please install your custom linux headers after install"
+			break
+			;;
+		*)
+			echo "Invalid answer. Please answer 1,2,3 or 4."
+			;;
+		esac
+	done
 }
 
 kernel_headers || echo "ERROR: Failed to install linux kernel headers"
 
-integrated_gpu_driver_install()
-{
-    cls_n_banner || echo "ERROR: Failed to put banner."
-    # internet_connection_check
-    echo "---C----             Installing Primary Gpu packages                  ---C----" 
-    while :
-    do
-	read -p "is one of your gpu intel [Yy/Nn]? " answer12
-	case $answer12 in
-	    "Y" | "y" | "")
-		echo "installing intel gpu driver"
-		sudo pacman -S intel-media-driver xf86-video-intel --ask 4
-		break;;
-	    "N" | "n")
-		echo "terminated"
-		break;;
-	    *)
-		echo "Invalid answer. Please answer [Yy/Nn]."
-	esac
-    done
+integrated_gpu_driver_install() {
+	cls_n_banner || echo "ERROR: Failed to put banner."
+	# internet_connection_check
+	echo "---C----             Installing Primary Gpu packages                  ---C----"
+	while :; do
+		read -p "is one of your gpu intel [Yy/Nn]? " answer12
+		case $answer12 in
+		"Y" | "y" | "")
+			echo "installing intel gpu driver"
+			sudo pacman -S intel-media-driver xf86-video-intel --ask 4
+			break
+			;;
+		"N" | "n")
+			echo "terminated"
+			break
+			;;
+		*)
+			echo "Invalid answer. Please answer [Yy/Nn]."
+			;;
+		esac
+	done
 }
 
 integrated_gpu_driver_install || echo "ERROR: Failed to install integrated gpu driver"
 
-dedicated_gpu_driver_install()
-{
-    cls_n_banner || echo "ERROR: Failed to put banner."
-    # internet_connection_check
-    echo "---C----             Installing Appropriate Gpu packages              ---C----"
-    while :
-    do
-	echo -e "1)Nvidia \n2)Amd \n3)Intel \n4)quit\n"
-	read -p "Select your choice: " answer5
-	case $answer5 in
-	    "1" | "")
-		echo "installing Nvidia"
-		case $answer4 in
-		    "1")
-			sudo pacman -S nvidia-dkms nvidia --ask 4;;
-		    *)
-			sudo pacman -S nvidia --ask 4;;
-		esac
-		break;;
-	    "2")
-		echo "installing intel"
-		sudo pacman -S mesa --ask 4
-		break;;
-	    "3")
-		echo "installing amd"
-		sudo pacman -S mesa mesa-vdpau --ask 4
-		while :
-		do
-		    echo "1)amdgpu \n2)radeon\n"
-		    read -p "Select your choice: " answer11
-		    case $answer11 in
+dedicated_gpu_driver_install() {
+	cls_n_banner || echo "ERROR: Failed to put banner."
+	# internet_connection_check
+	echo "---C----             Installing Appropriate Gpu packages              ---C----"
+	while :; do
+		echo -e "1)Nvidia \n2)Amd \n3)Intel \n4)quit\n"
+		read -p "Select your choice: " answer5
+		case $answer5 in
+		"1" | "")
+			echo "installing Nvidia"
+			case $answer4 in
 			"1")
-			    echo "installing amdgpu"
-			    sudo pacman -S xf86-video-amdgpu --ask 4
-			    break;;
-			"2" | "")
-			    echo "installing radeon"
-			    sudo pacman -S xf86-video-ati --ask 4
-			    break;;
+				sudo pacman -S nvidia-dkms nvidia --ask 4
+				;;
 			*)
-			    echo "Invalid answer. Please answer 1 or 2.";;
-		    esac
-		done
-		break;;
-	    "4")
-		echo "terminated"
-		break;;
-	    *)
-		echo "Invalid answer. Please answer 1,2,3 or 4.";;
-	esac
-    done
+				sudo pacman -S nvidia --ask 4
+				;;
+			esac
+			break
+			;;
+		"2")
+			echo "installing intel"
+			sudo pacman -S mesa --ask 4
+			break
+			;;
+		"3")
+			echo "installing amd"
+			sudo pacman -S mesa mesa-vdpau --ask 4
+			while :; do
+				echo "1)amdgpu \n2)radeon\n"
+				read -p "Select your choice: " answer11
+				case $answer11 in
+				"1")
+					echo "installing amdgpu"
+					sudo pacman -S xf86-video-amdgpu --ask 4
+					break
+					;;
+				"2" | "")
+					echo "installing radeon"
+					sudo pacman -S xf86-video-ati --ask 4
+					break
+					;;
+				*)
+					echo "Invalid answer. Please answer 1 or 2."
+					;;
+				esac
+			done
+			break
+			;;
+		"4")
+			echo "terminated"
+			break
+			;;
+		*)
+			echo "Invalid answer. Please answer 1,2,3 or 4."
+			;;
+		esac
+	done
 }
 
 dedicated_gpu_driver_install || echo "ERROR: Failed to install dedicated gpu driver"
 
-dedicated_gpu_driver_manager_install()
-{
-    cls_n_banner || echo "ERROR: Failed to put banner."
-    # internet_connection_check
-    echo "---C----              Installing Hybrid Gpu packages                   ---C----"
-    while :
-    do
-	echo -e "1)Nvidia-hybrid \n2)Amd-hybrid \n3)quit\n"
-	read -p "Select your choice: " answer6
-	case $answer6 in
-	    "1" | "")
-		echo "installing Nvidia-Hybrid"
-		while :
-		do
-		    echo -e "1)Bumblebee \n2)nvidia-prime \n3)nvidia-xrun\n"
-		    read -p "Select your choice: " answer7
-		    case $answer7 in
-			"1")
-			    sudo pacman -S Bumblebee bbswitch bbswitch-dkms --ask 4
-			    break;;
-			"2" | "")
-			    sudo pacman -S nvidia-prime bbswitch bbswitch-dkms --ask 4
-			    break;;
-			"3")
-			    sudo pacman -S nvidia-xrun bbswitch bbswitch-dkms --ask 4
-			    break;;
-			*)
-			    echo "Invalid answer. Please answer 1,2 or 3.";;
-		    esac
-		done
-		break;;
-	    "2")
-		echo "placed Amd-Hybrid switch directory with scripts and configs in /opt/amd-hybrid-switcher"
-		break;;
-	    "3")
-		echo "terminated"
-		break;;
-	    *)
-		echo "Invalid answer. Please answer 1,2 or 3.";;
-	esac
-    done
+dedicated_gpu_driver_manager_install() {
+	cls_n_banner || echo "ERROR: Failed to put banner."
+	# internet_connection_check
+	echo "---C----              Installing Hybrid Gpu packages                   ---C----"
+	while :; do
+		echo -e "1)Nvidia-hybrid \n2)Amd-hybrid \n3)quit\n"
+		read -p "Select your choice: " answer6
+		case $answer6 in
+		"1" | "")
+			echo "installing Nvidia-Hybrid"
+			while :; do
+				echo -e "1)Bumblebee \n2)nvidia-prime \n3)nvidia-xrun\n"
+				read -p "Select your choice: " answer7
+				case $answer7 in
+				"1")
+					sudo pacman -S Bumblebee bbswitch bbswitch-dkms --ask 4
+					break
+					;;
+				"2" | "")
+					sudo pacman -S nvidia-prime bbswitch bbswitch-dkms --ask 4
+					break
+					;;
+				"3")
+					sudo pacman -S nvidia-xrun bbswitch bbswitch-dkms --ask 4
+					break
+					;;
+				*)
+					echo "Invalid answer. Please answer 1,2 or 3."
+					;;
+				esac
+			done
+			break
+			;;
+		"2")
+			echo "placed Amd-Hybrid switch directory with scripts and configs in /opt/amd-hybrid-switcher"
+			break
+			;;
+		"3")
+			echo "terminated"
+			break
+			;;
+		*)
+			echo "Invalid answer. Please answer 1,2 or 3."
+			;;
+		esac
+	done
 }
 
 dedicated_gpu_driver_install || echo "ERROR: Failed to install dedicated gpu driver manager"
 
-ucode_install()
-{
-    cls_n_banner || echo "ERROR: Failed to put banner."
-    # internet_connection_check
-    echo "---C----              Installing Cpu Ucodes                         ---C----"
-    while :
-    do
-	echo -e "1)Intel-ucode \n2)Amd-ucode \n3)quit\n"
-	read -p "Select your choice: " answer6
-	case $answer6 in
-	    "1" | "")
-		echo "installing Intel-ucode"
-		sudo pacman -S intel-ucode --ask 4
-		sudo grub-mkconfig -o /boot/grub/grub.cfg
-		break;;
-	    "2")
-		echo "installing Amd-ucode"
-		sudo pacman -S amd-ucode --ask 4
-		sudo grub-mkconfig -o /boot/grub/grub.cfg
-		break;;
-	    "3")
-		echo "terminated"
-		break;;
-	    *)
-		echo "Invalid answer. Please answer 1,2 or 3."
-	esac
-    done
+ucode_install() {
+	cls_n_banner || echo "ERROR: Failed to put banner."
+	# internet_connection_check
+	echo "---C----              Installing Cpu Ucodes                         ---C----"
+	while :; do
+		echo -e "1)Intel-ucode \n2)Amd-ucode \n3)quit\n"
+		read -p "Select your choice: " answer6
+		case $answer6 in
+		"1" | "")
+			echo "installing Intel-ucode"
+			sudo pacman -S intel-ucode --ask 4
+			sudo grub-mkconfig -o /boot/grub/grub.cfg
+			break
+			;;
+		"2")
+			echo "installing Amd-ucode"
+			sudo pacman -S amd-ucode --ask 4
+			sudo grub-mkconfig -o /boot/grub/grub.cfg
+			break
+			;;
+		"3")
+			echo "terminated"
+			break
+			;;
+		*)
+			echo "Invalid answer. Please answer 1,2 or 3."
+			;;
+		esac
+	done
 }
 
 ucode_install || echo "ERROR: Failed to install cpu ucode"
@@ -319,52 +329,54 @@ ucode_install || echo "ERROR: Failed to install cpu ucode"
 cls_n_banner || echo "ERROR: Failed to put banner."
 # internet_connection_check
 echo "---C----              Installing my packages                        ---C----"
-sudo pacman -S - < pkglists/pacman.txt --overwrite=\* --ask 4
+sudo pacman -S - --overwrite=\* --ask 4 <pkglists/pacman.txt
 
-multiple_monitors()
-{
-    cls_n_banner || echo "ERROR: Failed to put banner."
-    # internet_connection_check
-    echo "---C----              running one or multiple monitors              ---C----"
-    while :
-    do
-	read -p "are you running multiple monitors [Yy/Nn]? " answer3
-	case $answer3 in
-	    "Y" | "y" | "")
-		echo "installing arandr"
-		sudo pacman -S arandr --ask 4
-		break;;
-	    "N" | "n")
-		echo "proceeding with the installation"
-		break;;
-	    *)
-		echo "Invalid answer. Please answer [Yy|Nn]"
-	esac
-    done
+multiple_monitors() {
+	cls_n_banner || echo "ERROR: Failed to put banner."
+	# internet_connection_check
+	echo "---C----              running one or multiple monitors              ---C----"
+	while :; do
+		read -p "are you running multiple monitors [Yy/Nn]? " answer3
+		case $answer3 in
+		"Y" | "y" | "")
+			echo "installing arandr"
+			sudo pacman -S arandr --ask 4
+			break
+			;;
+		"N" | "n")
+			echo "proceeding with the installation"
+			break
+			;;
+		*)
+			echo "Invalid answer. Please answer [Yy|Nn]"
+			;;
+		esac
+	done
 }
 
 multiple_monitors || echo "ERROR: Failed to install arandr"
 
-ssh_install()
-{
-    cls_n_banner || echo "ERROR: Failed to put banner."
-    # internet_connection_check
-    echo "---C----              Installing openssh/ssh                        ---C----"
-    while :
-    do
-	read -p "do you want to install openssh/ssh [Yy/Nn]? " answer10
-	case $answer10 in
-	"Y" | "y" | "")
-	    echo "installing openssh/ssh"
-	    sudo pacman -S openssh neon-os-sshd --ask 4 --overwrite=\*
-	    break;;
-	"N" | "n")
-	    echo "terminated"
-	    break;;
-	*)
-	    echo "Invalid answer. Please answer [Yy/Nn].";;
-	esac
-    done
+ssh_install() {
+	cls_n_banner || echo "ERROR: Failed to put banner."
+	# internet_connection_check
+	echo "---C----              Installing openssh/ssh                        ---C----"
+	while :; do
+		read -p "do you want to install openssh/ssh [Yy/Nn]? " answer10
+		case $answer10 in
+		"Y" | "y" | "")
+			echo "installing openssh/ssh"
+			sudo pacman -S openssh neon-os-sshd --ask 4 --overwrite=\*
+			break
+			;;
+		"N" | "n")
+			echo "terminated"
+			break
+			;;
+		*)
+			echo "Invalid answer. Please answer [Yy/Nn]."
+			;;
+		esac
+	done
 }
 
 ssh_install || echo "ERROR: Failed to install openssh"
@@ -381,19 +393,17 @@ echo "##########################################################################
 echo "########                   ENABLING AUR AND SNAP                    ########"
 echo "############################################################################"
 
-paru_clone_install()
-{
-    # internet_connection_check
-    git clone https://aur.archlinux.org/paru-bin.git
-    cd paru-bin
+paru_clone_install() {
+	# internet_connection_check
+	git clone https://aur.archlinux.org/paru-bin.git
+	cd paru-bin
 }
 
-paru_make_install()
-{
-    paru_clone_install || cd paru-bin
-    makepkg -si
-    # internet_connection_check
-    sudo pacman -S neon-os-paru --ask 4 --overwrite=\*
+paru_make_install() {
+	paru_clone_install || cd paru-bin
+	makepkg -si
+	# internet_connection_check
+	sudo pacman -S neon-os-paru --ask 4 --overwrite=\*
 }
 
 paru_make_install || echo "ERROR: Failed to install aura-bin"
@@ -403,8 +413,8 @@ echo "##########################################################################
 echo "########                   INSTALLING AUR PACKAGES                  ########"
 echo "############################################################################"
 
-cd 
-paru -S - < neon-os/pkglists/yay.txt --ask 4 --overwrite=\*
+cd
+paru -S - --ask 4 --overwrite=\* <neon-os/pkglists/yay.txt
 sudo pacman -S stdm-git --ask 4
 
 cls_n_banner || echo "ERROR: Failed to put banner."
@@ -412,26 +422,23 @@ echo "##########################################################################
 echo "########                 INSTALLING COLORIZING PROGRAM              ########"
 echo "############################################################################"
 
-make_colorizing_program_manually()
-{
-    # internet_connection_check
-    git clone https://github.com/cacalabs/toilet.git
-    cd toilet
+make_colorizing_program_manually() {
+	# internet_connection_check
+	git clone https://github.com/cacalabs/toilet.git
+	cd toilet
 }
 
-install_colorizing_program_manually()
-{
-    make_colorizing_program_manually || cd toilet
-    ./bootstrap
-    ./configure --prefix=/usr
-    make
-    sudo cp src/toilet /usr/bin/
+install_colorizing_program_manually() {
+	make_colorizing_program_manually || cd toilet
+	./bootstrap
+	./configure --prefix=/usr
+	make
+	sudo cp src/toilet /usr/bin/
 }
 
-install_colorizing_program()
-{
-    # internet_connection_check
-    paru -S toilet --ask 4 --overwrite=\*
+install_colorizing_program() {
+	# internet_connection_check
+	paru -S toilet --ask 4 --overwrite=\*
 }
 
 install_colorizing_program || install_colorizing_program_manually || echo "ERROR: Failed to install colorizing program."
@@ -441,29 +448,30 @@ echo "##########################################################################
 echo "########                    INSTALLING OPTIMUS MANAGER              ########"
 echo "############################################################################"
 
-optimus_manager_install()
-{
-    cls_n_banner || echo "ERROR: Failed to put banner."
-    # internet_connection_check
-    echo "---C----              Installing optimus-manager                    ---C----"
-    sudo mkdir /etc/sddm.conf.d/ || echo "ERROR: Folder already exists"
-    while :
-    do
-	read -p "do you want to install optimus-manager [Yy/Nn]? " answer8
-	case $answer8 in
-	    "Y" | "y" | "")
-		echo "installing optimus-manager"
-		paru -S optimus-manager-qt --ask 4 --overwrite=\*
-		sudo pacman -S neon-os-optimus-manager neon-os-sddm-nvidia --ask 4 --overwrite=\*
-		break;;
-	    "N" | "n")
-		echo "terminated"
-		sudo pacman -S neon-os-sddm --ask 4 --overwrite=\*
-		break;;
-	    *)
-		echo "Invalid answer. Please answer [Yy/Nn].";;
-	esac
-    done
+optimus_manager_install() {
+	cls_n_banner || echo "ERROR: Failed to put banner."
+	# internet_connection_check
+	echo "---C----              Installing optimus-manager                    ---C----"
+	sudo mkdir /etc/sddm.conf.d/ || echo "ERROR: Folder already exists"
+	while :; do
+		read -p "do you want to install optimus-manager [Yy/Nn]? " answer8
+		case $answer8 in
+		"Y" | "y" | "")
+			echo "installing optimus-manager"
+			paru -S optimus-manager-qt --ask 4 --overwrite=\*
+			sudo pacman -S neon-os-optimus-manager neon-os-sddm-nvidia --ask 4 --overwrite=\*
+			break
+			;;
+		"N" | "n")
+			echo "terminated"
+			sudo pacman -S neon-os-sddm --ask 4 --overwrite=\*
+			break
+			;;
+		*)
+			echo "Invalid answer. Please answer [Yy/Nn]."
+			;;
+		esac
+	done
 }
 
 optimus_manager_install || echo "ERROR: Failed to install optimus-manager and sddm.conf"
@@ -484,47 +492,54 @@ echo "########             CHOOSE THE TILLING WINDOW MANAGER(S)           ######
 echo "############################################################################"
 
 yn="Y"
-while :
-do
-    case $yn in
+while :; do
+	case $yn in
 	"y" | "Y" | "")
-	    while :
-	    do
-		echo -e "1)Awesomewm \n2)Qtile \n3)I3wm \n4)Quit \nOr press enter to install all wms\n"
-		read -p "Select your choice: " answer20
-		case $answer20 in
-		    "1")
-			echo "installing awesomewm"
-			sudo pacman -S awesome --ask 4
-			break;;
-		    "2")
-			echo "installing qtile"
-			sudo pacman -S qtile --ask 4
-			break;;
-		    "3")
-			echo "installing i3wm"
-			sudo pacman -S i3-gaps polybar --ask 4
-			break;;
-		    "4")
-			echo "terminated"
-			break;;
-		    "")
-			echo "Installing all window managers."
-			sudo pacman -S awesome qtile i3-gaps i3blocks --ask 4
-			yn="N"
-			break;;
-		    *)
-			echo "Invalid answer. Please answer 1,2,3,4 or press <enter>";;
-		esac
-	    done
-	    read -p "Do you want to install another window manager [Yy/Nn]? " yn;;	    
+		while :; do
+			echo -e "1)Awesomewm \n2)Qtile \n3)I3wm \n4)Quit \nOr press enter to install all wms\n"
+			read -p "Select your choice: " answer20
+			case $answer20 in
+			"1")
+				echo "installing awesomewm"
+				sudo pacman -S awesome --ask 4
+				break
+				;;
+			"2")
+				echo "installing qtile"
+				sudo pacman -S qtile --ask 4
+				break
+				;;
+			"3")
+				echo "installing i3wm"
+				sudo pacman -S i3-gaps polybar --ask 4
+				break
+				;;
+			"4")
+				echo "terminated"
+				break
+				;;
+			"")
+				echo "Installing all window managers."
+				sudo pacman -S awesome qtile i3-gaps i3blocks --ask 4
+				yn="N"
+				break
+				;;
+			*)
+				echo "Invalid answer. Please answer 1,2,3,4 or press <enter>"
+				;;
+			esac
+		done
+		read -p "Do you want to install another window manager [Yy/Nn]? " yn
+		;;
 	"N" | "n")
-	    echo "Proceeding with the installation."
-	    break;;
+		echo "Proceeding with the installation."
+		break
+		;;
 	*)
-	    echo "Invalid answer. Please answer [Yy/Nn]."
-	    read -p "Do you want to install another window manager [Yy/Nn]? " yn;;	    
-    esac
+		echo "Invalid answer. Please answer [Yy/Nn]."
+		read -p "Do you want to install another window manager [Yy/Nn]? " yn
+		;;
+	esac
 done
 
 cls_n_banner || echo "ERROR: Failed to put banner."
@@ -534,13 +549,13 @@ echo "##########################################################################
 
 cd ~/neon-os
 sudo cp -rf /etc/neon-os/dotfiles/.config ~/
-sudo chown -R $USER ~/.config 
+sudo chown -R $USER ~/.config
 sudo cp -rf /etc/neon-os/dotfiles/.emacs.d ~/
-sudo chown -R $USER ~/.emacs.d 
+sudo chown -R $USER ~/.emacs.d
 sudo cp -rf /etc/neon-os/dotfiles/.imwheelrc ~/
-sudo chown $USER ~/.imwheelrc 
+sudo chown $USER ~/.imwheelrc
 sudo cp -rf /etc/neon-os/dotfiles/.bashrc ~/
-sudo chown $USER ~/.bashrc 
+sudo chown $USER ~/.bashrc
 sudo cp -r etc/all-themes-sddm/ /usr/share/sddm/themes/
 sudo cp etc/ufetch-arch /usr/bin/
 sudo cp -r snapper-configs/* /etc/snapper/configs/
@@ -576,7 +591,7 @@ sudo systemctl enable clamav-freshclam.service clamav-clamonacc.service clamav-d
 sudo systemctl enable libvirtd.service || echo "ERROR: Failed to enable libvirtd"
 sudo systemctl enable set-cfs-tweaks.service || echo "ERROR: Failed to enable cfs tweaks"
 sudo systemctl enable asd.service asd-resync.service asd-resync.timer || echo "ERROR: Failed to enable anything-sync-daemon"
-psd 2> /dev/null 1> /dev/null
+psd 2>/dev/null 1>/dev/null
 sudo systemctl enable psd.service psd-resync.service || echo "ERROR: Failed to enable profile-sync-daemon"
 
 cd ~/neon-os
@@ -585,28 +600,29 @@ cp services/* .config/systemd/user/
 systemctl --user daemon-reload
 systemctl enable --user emacs.service ssh-agent.service imwheel.service || echo "ERROR: Failed to enable emacs ssh and imwheel services"
 
-laptop_or_desktop()
-{
-    cls_n_banner || echo "ERROR: Failed to put banner."
-    # internet_connection_check
-    echo "---C----			          LAPTOP OR DESKTOP			     ---C----"
-    while :
-    do
-	read -p "are you running a laptop [Yy/Nn]? " answer2
-	case $answer2 in
-	    "y" | "Y" | "")
-		echo "enabling tlp" 
-		sudo pacman -S neon-os-tlp --ask 4 --overwrite=\*
-		sudo systemctl enable tlp
-		sudo tlp start
-		break;;
-	    "N" | "n")
-		echo "proceeding with the installation"
-		break;;
-	    *)
-		echo "Invalid answer. Please answer [Yy/Nn]."
-	esac
-    done
+laptop_or_desktop() {
+	cls_n_banner || echo "ERROR: Failed to put banner."
+	# internet_connection_check
+	echo "---C----			          LAPTOP OR DESKTOP			     ---C----"
+	while :; do
+		read -p "are you running a laptop [Yy/Nn]? " answer2
+		case $answer2 in
+		"y" | "Y" | "")
+			echo "enabling tlp"
+			sudo pacman -S neon-os-tlp --ask 4 --overwrite=\*
+			sudo systemctl enable tlp
+			sudo tlp start
+			break
+			;;
+		"N" | "n")
+			echo "proceeding with the installation"
+			break
+			;;
+		*)
+			echo "Invalid answer. Please answer [Yy/Nn]."
+			;;
+		esac
+	done
 }
 laptop_or_desktop || echo "ERROR: Failed to install tlp"
 
@@ -622,32 +638,34 @@ echo "##########################################################################
 echo "########                      SETTING UP TPM                        ########"
 echo "############################################################################"
 
-tpm_install()
-{
-    # internet_connection_check
-    while :
-    do
-	echo -e "1)TPM-1.2 \n2)TPM-2.0 \n3)Quit\n"
-	read -p "Select your choice: " answer
-	case $answer in
-	    "1")
-		echo "installing TPM-1.2"
-		paru -S tpm-tools trousers --ask 4 --overwrite=\*
-		modprobe tpm
-		modprobe -a tpm_{atmel,infineon,nsc,tis,crb}
-		sudo systemctl enable tcsd.service
-		break;;
-	    "2" | "")
-		echo "installing TPM-2.0"
-		sudo pacman -S tpm2-tools --ask 4
-		break;;
-	    "3")
-		echo "terminated"
-		break;;
-	    *)
-		echo "Invalid answer. Please answer 1,2 or 3.";;
-	esac
-    done
+tpm_install() {
+	# internet_connection_check
+	while :; do
+		echo -e "1)TPM-1.2 \n2)TPM-2.0 \n3)Quit\n"
+		read -p "Select your choice: " answer
+		case $answer in
+		"1")
+			echo "installing TPM-1.2"
+			paru -S tpm-tools trousers --ask 4 --overwrite=\*
+			modprobe tpm
+			modprobe -a tpm_{atmel,infineon,nsc,tis,crb}
+			sudo systemctl enable tcsd.service
+			break
+			;;
+		"2" | "")
+			echo "installing TPM-2.0"
+			sudo pacman -S tpm2-tools --ask 4
+			break
+			;;
+		"3")
+			echo "terminated"
+			break
+			;;
+		*)
+			echo "Invalid answer. Please answer 1,2 or 3."
+			;;
+		esac
+	done
 }
 tpm_install || echo "ERROR: Failed to install tpm driver"
 
@@ -656,25 +674,26 @@ echo "##########################################################################
 echo "########                     INSTALLING NEXTDNS                     ########"
 echo "############################################################################"
 
-nextdns_install()
-{
-    # internet_connection_check
-    while :
-    do
-	read -p "do you want to install nextdns [Yy/Nn]? " yn
-	case $yn in
-	    "Y" | "y" | "")
-		echo "installing nextdns"
-		paru -S nextdns-bin --ask 4 --overwrite=\*
-		sudo sh -c "$(curl -sL https://nextdns.io/install)"
-		break;;
-	    "N" | "n")
-		echo "terminated"
-		break;;
-	    *)
-		echo "Invalid answer. Please answer [Yy/Nn].";;
-	esac
-    done
+nextdns_install() {
+	# internet_connection_check
+	while :; do
+		read -p "do you want to install nextdns [Yy/Nn]? " yn
+		case $yn in
+		"Y" | "y" | "")
+			echo "installing nextdns"
+			paru -S nextdns-bin --ask 4 --overwrite=\*
+			sudo sh -c "$(curl -sL https://nextdns.io/install)"
+			break
+			;;
+		"N" | "n")
+			echo "terminated"
+			break
+			;;
+		*)
+			echo "Invalid answer. Please answer [Yy/Nn]."
+			;;
+		esac
+	done
 }
 nextdns_install || echo "ERROR: Failed to install nextdns"
 
@@ -683,29 +702,32 @@ echo "##########################################################################
 echo "########                    DISABLING WATCHDOGS                     ########"
 echo "############################################################################"
 
-watchdog_blacklist()
-{
-    var=`mkinitcpio -M | rg wdt`
-    case $var in
+watchdog_blacklist() {
+	var=$(mkinitcpio -M | rg wdt)
+	case $var in
 	"iTCO_wdt")
-	    while :
-	    do
-		read -p "do you want to disable watchdog [Yy/Nn]? " yn
-		case $yn in
-		    "y" | "Y" | "")
-			echo "disabling watchdog"
-			sudo pacman -S neon-os-watchdog-blacklist --ask 4 --overwrite=\*
-			break;;
-		    "N" | "n")
-			echo "terminated"
-			break;;
-		    *)
-			echo "Invalid answer. Please answer [Yy/Nn].";;
-		esac
-	    done;;
+		while :; do
+			read -p "do you want to disable watchdog [Yy/Nn]? " yn
+			case $yn in
+			"y" | "Y" | "")
+				echo "disabling watchdog"
+				sudo pacman -S neon-os-watchdog-blacklist --ask 4 --overwrite=\*
+				break
+				;;
+			"N" | "n")
+				echo "terminated"
+				break
+				;;
+			*)
+				echo "Invalid answer. Please answer [Yy/Nn]."
+				;;
+			esac
+		done
+		;;
 	*)
-	    echo -e "At present the script does not \nsupport disabling other types of \nwatchdogs but it would be included in the next release. \nIf you want to still disable the watchdog you can refer to \nthis arch wiki page ===> https://wiki.archlinux.org/title/improving_performance#Watchdogs \nand this blog post ===> https://linuxhint.com/linux-kernel-watchdog-explained/";;
-    esac
+		echo -e "At present the script does not \nsupport disabling other types of \nwatchdogs but it would be included in the next release. \nIf you want to still disable the watchdog you can refer to \nthis arch wiki page ===> https://wiki.archlinux.org/title/improving_performance#Watchdogs \nand this blog post ===> https://linuxhint.com/linux-kernel-watchdog-explained/"
+		;;
+	esac
 }
 watchdog_blacklist || echo "ERROR: Failed to blacklist watchdog kernel module"
 
@@ -714,26 +736,28 @@ echo "##########################################################################
 echo "########                CHANGING DEFAULT USER SHELL                 ########"
 echo "############################################################################"
 
-change_user_default_shell()
-{
-    while :
-    do
-	echo -e "1)Fish \n2)Bash \n3)Quit\n"
-	read -p "Select your choice: " choice
-	case $choice in
-	    "1" | "")
-		sudo usermod -s /bin/fish $USER
-		break;;
-	    "2")
-		sudo usermod -s /bin/bash $USER
-		break;;
-	    "3")
-		echo "terminated"
-		break;;
-	    *)
-		echo "Invalid answer. Please answer 1,2 or 3.";;
-	esac
-    done
+change_user_default_shell() {
+	while :; do
+		echo -e "1)Fish \n2)Bash \n3)Quit\n"
+		read -p "Select your choice: " choice
+		case $choice in
+		"1" | "")
+			sudo usermod -s /bin/fish $USER
+			break
+			;;
+		"2")
+			sudo usermod -s /bin/bash $USER
+			break
+			;;
+		"3")
+			echo "terminated"
+			break
+			;;
+		*)
+			echo "Invalid answer. Please answer 1,2 or 3."
+			;;
+		esac
+	done
 }
 
 change_user_default_shell || echo "ERROR: Failed to change default user shell."
@@ -743,80 +767,86 @@ echo "##########################################################################
 echo "########                   INSTALLING A FIREWALL                    ########"
 echo "############################################################################"
 
-custom_firewall_rules()
-{
-    yn="Y"
-    while :
-    do
-	case $yn in
-	    "Y" | "y" | "")
-		read -p "Port: " port
-		echo "1)Allow \n2)Deny \n3)Limit\n"
-		read -p "Select your choice: " choice
-		while :
-		do
-		    case $choice in
-			"1" | "")
-			    sudo ufw allow $port
-			    break;;
-			"2")
-			    sudo ufw deny $port
-			    break;;
-			"3")
-			    sudo ufw limit $port
-			    break;;
-			*)
-			    "Invalid choice. Please answer 1,2 or 3.";;
-		    esac
-		done
-		read -p "Do you want to add another rule [Yy|Nn]? " yn
-		continue;;
-	    "N" | "n")
-		sudo ufw enable
-		sudo ufw default deny incoming
-		sudo ufw default allow outgoing
-		echo "Terminated."
-		break;;
-	    *)
-		echo "Invalid answer. Please answer [Yy|Nn].";;
-	esac
-    done
+custom_firewall_rules() {
+	yn="Y"
+	while :; do
+		case $yn in
+		"Y" | "y" | "")
+			read -p "Port: " port
+			echo "1)Allow \n2)Deny \n3)Limit\n"
+			read -p "Select your choice: " choice
+			while :; do
+				case $choice in
+				"1" | "")
+					sudo ufw allow $port
+					break
+					;;
+				"2")
+					sudo ufw deny $port
+					break
+					;;
+				"3")
+					sudo ufw limit $port
+					break
+					;;
+				*)
+					"Invalid choice. Please answer 1,2 or 3."
+					;;
+				esac
+			done
+			read -p "Do you want to add another rule [Yy|Nn]? " yn
+			continue
+			;;
+		"N" | "n")
+			sudo ufw enable
+			sudo ufw default deny incoming
+			sudo ufw default allow outgoing
+			echo "Terminated."
+			break
+			;;
+		*)
+			echo "Invalid answer. Please answer [Yy|Nn]."
+			;;
+		esac
+	done
 }
 
-ufw_firewall_install()
-{
-    while :
-    do
-	echo "Firewall rules:"
-	echo -e "1)Developer \n2)Custom \n3)Quit\n"
-	read -p "Select your choice: " choice
-	case $choice in
-	    "1" | "")
-		echo "installing ufw and adding developer rules"
-		sudo pacman -S ufw --ask 4 --overwrite=\*
-		sudo systemctl enable ufw.service || echo "ERROR: Failed to enable ufw"
-		sudo ufw allow 53
-		sudo ufw allow 80
-		sudo ufw allow 443
-		sudo ufw allow 9050
-		sudo ufw limit 22
-		sudo ufw default deny incoming
-		sudo ufw default allow outgoing
-		sudo ufw enable
-		break;;
-	    "2")
-		echo "installing ufw and adding user defined custom rules"
-		sudo pacman -S ufw --ask 4 --overwrite=\*
-		sudo systemctl enable ufw.service || echo "ERROR: Failed to enable ufw"
-		custom_firewall_rules || echo "ERROR: Failed to set custom firewall rules."
-		break;;
-	    "3")
-		echo "Terminated."
-		break;;
-	    *)
-		echo "Invalid answer. Please answer 1,2 or 3.";;
-	esac
-    done
+ufw_firewall_install() {
+	while :; do
+		echo "Firewall rules:"
+		echo -e "1)Developer \n2)Custom \n3)Quit\n"
+		read -p "Select your choice: " choice
+		case $choice in
+		"1" | "")
+			echo "installing ufw and adding developer rules"
+			sudo pacman -S ufw --ask 4 --overwrite=\*
+			sudo systemctl enable ufw.service || echo "ERROR: Failed to enable ufw"
+			sudo ufw allow 53
+			sudo ufw allow 80
+			sudo ufw allow 443
+			sudo ufw allow 9050
+			sudo ufw limit 22
+			sudo ufw default deny incoming
+			sudo ufw default allow outgoing
+			sudo ufw enable
+			break
+			;;
+		"2")
+			echo "installing ufw and adding user defined custom rules"
+			sudo pacman -S ufw --ask 4 --overwrite=\*
+			sudo systemctl enable ufw.service || echo "ERROR: Failed to enable ufw"
+			custom_firewall_rules || echo "ERROR: Failed to set custom firewall rules."
+			break
+			;;
+		"3")
+			echo "Terminated."
+			break
+			;;
+		*)
+			echo "Invalid answer. Please answer 1,2 or 3."
+			;;
+		esac
+	done
 }
 
 ufw_firewall_install || echo "ERROR: Failed to install ufw."
@@ -826,28 +856,66 @@ echo "##########################################################################
 echo "########                    INSTALLING FAIL2BAN                     ########"
 echo "############################################################################"
 
-fail2ban_install()
-{
-    # internet_connection_check
-    while :
-    do
-	read -p "do you want to install fail2ban [Yy/Nn]? " yn
-	case $yn in
-	"Y" | "y" | "")
-	    echo "installing fail2ban"
-	    sudo pacman -S fail2ban neon-os-fail2ban --ask 4 --overwrite=\*
-	    sudo systemctl enable fail2ban.service || echo "ERROR: Failed to enable fail2ban"
-	    break;;
-	"N" | "n")
-	    echo "terminated"
-	    break;;
-	*)
-	    echo "Invalid answer. Please answer [Yy/Nn].";;
-	esac
-    done
+fail2ban_install() {
+	# internet_connection_check
+	while :; do
+		read -p "do you want to install fail2ban [Yy/Nn]? " yn
+		case $yn in
+		"Y" | "y" | "")
+			echo "installing fail2ban"
+			sudo pacman -S fail2ban neon-os-fail2ban --ask 4 --overwrite=\*
+			sudo systemctl enable fail2ban.service || echo "ERROR: Failed to enable fail2ban"
+			break
+			;;
+		"N" | "n")
+			echo "terminated"
+			break
+			;;
+		*)
+			echo "Invalid answer. Please answer [Yy/Nn]."
+			;;
+		esac
+	done
 }
 
 fail2ban_install || echo "ERROR: Failed to install fail2ban"
+
+cls_n_banner || echo "ERROR: Failed to put banner."
+echo "############################################################################"
+echo "########                       VIM OR EMACS                         ########"
+echo "############################################################################"
+
+vim_or_emacs() {
+	# internet_connection_check
+	echo "---C----                   Vim or Emacs                        ---C----"
+	while :; do
+		echo -e "1)Vim \n2)Emacs \n3)Both \n4)Quit\n"
+		read -p "select your choice: " yn
+		case $yn in
+		"3" | "")
+			echo "install all lsp plugins within neovim and run update-lsp script"
+			break
+			;;
+		"1")
+			echo "install all lsp plugins within neovim"
+			break
+			;;
+		"2")
+			sudo pacman -S stylua python-black prettier shfmt astyle lua-language-server --ask 4
+			break
+			;;
+		"4")
+			echo "terminated"
+			break
+			;;
+		*)
+			echo "Invalid answer. Please answer 1,2,3 or 4."
+			;;
+		esac
+	done
+}
+
+vim_or_emacs || echo "ERROR: Failed to install plugins for vim or emacs"
 
 cls_n_banner || echo "ERROR: Failed to put banner."
 echo "############################################################################"
@@ -862,23 +930,24 @@ echo "##########################################################################
 echo "########                  REBOOTING YOUR SYSTEM                     ########"
 echo "############################################################################"
 
-reboot_or_not()
-{
-    while :
-    do
-	read -p "do you want to reboot [Yy/Nn]? " yn
-	case $yn in
-	"Y" | "y" | "")
-	    echo "rebooting the system"
-	    reboot
-	    break;;
-	"N" | "n")
-	    echo "terminated"
-	    break;;
-	*)
-	    echo "Invalid answer. Please answer [Yy/Nn].";;
-	esac
-    done
+reboot_or_not() {
+	while :; do
+		read -p "do you want to reboot [Yy/Nn]? " yn
+		case $yn in
+		"Y" | "y" | "")
+			echo "rebooting the system"
+			reboot
+			break
+			;;
+		"N" | "n")
+			echo "terminated"
+			break
+			;;
+		*)
+			echo "Invalid answer. Please answer [Yy/Nn]."
+			;;
+		esac
+	done
 }
 
 reboot_or_not || echo "ERROR: Failed to reboot."

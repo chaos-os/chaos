@@ -4,12 +4,6 @@ ttf-font-nerd
 ttf-iosevka-nerd
 otf-font-awesome
 ttf-joypixels
-stylua
-python-black
-prettier
-astyle
-shfmt
-lua-language-server
 kitty
 alsa-firmware
 base-devel
