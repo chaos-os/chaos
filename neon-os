@@ -581,7 +581,7 @@ echo "##########################################################################
 sudo systemctl enable bluetooth || echo "ERROR: Failed to enable bluetooth"
 sudo systemctl enable alsa-state.service alsa-restore.service || echo "ERROR: Failed to enable alsa"
 sudo systemctl enable pulseaudio || echo "ERROR: Failed to enable pulseaudio"
-sudo systemctl enable reflector.service reflector.timer || echo "ERROR: Failed to enable reflector"
+# sudo systemctl enable reflector.service reflector.timer || echo "ERROR: Failed to enable reflector"
 sudo systemctl enable snapper-timeline.timer snapper-cleanup.timer || echo "ERROR: Failed to enable snapper"
 sudo timedatectl set-ntp true || echo "ERROR: Failed to set ntp time"
 sudo systemctl mask systemd-rfkill.service systemd-rfkill.socket || echo "ERROR: Failed to enable systemd-rfkill"
