@@ -671,21 +671,21 @@ tpm_install || echo "ERROR: Failed to install tpm driver"
 
 cls_n_banner || echo "ERROR: Failed to put banner."
 echo "############################################################################"
-echo "########                     INSTALLING NEXTDNS                     ########"
+echo "########                        SETTING UP DNS                      ########"
 echo "############################################################################"
 
 nextdns_install() {
 	# internet_connection_check
 	while :; do
-		read -p "do you want to install nextdns [Yy/Nn]? " yn
+		read -p "do you want to setup faster dns [Yy/Nn]? " yn
 		case $yn in
-		"Y" | "y" | "")
-			echo "installing nextdns"
-			paru -S nextdns-bin --ask 4 --overwrite=\*
-			sudo sh -c "$(curl -sL https://nextdns.io/install)"
+		"Y" | "y")
+			echo "setting up faster dns"
+			sudo pacman -S neon-os-dns --ask 4 --overwrite=\*
+			sudo systemctl enable systemd-resolved.service || echo "ERROR: Failed to enable systemd-resolved.service"
 			break
 			;;
-		"N" | "n")
+		"N" | "n" | "")
 			echo "terminated"
 			break
 			;;
@@ -695,7 +695,7 @@ nextdns_install() {
 		esac
 	done
 }
-nextdns_install || echo "ERROR: Failed to install nextdns"
+nextdns_install || echo "ERROR: Failed to setup faster dns"
 
 cls_n_banner || echo "ERROR: Failed to put banner."
 echo "############################################################################"
