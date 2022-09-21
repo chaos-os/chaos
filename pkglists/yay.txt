@@ -7,8 +7,6 @@ nordic-theme-git
 kripton-theme-git
 lumins-bin
 powershell-bin
-appimage-cli-tool-git
-appimagelauncher
 toilet
 figlet-fonts
 ncpamixer

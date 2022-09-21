@@ -112,3 +112,4 @@ oxygen
 breeze
 xclip
 go
+flatpak
