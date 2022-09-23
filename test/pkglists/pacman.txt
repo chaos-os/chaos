@@ -113,3 +113,4 @@ breeze
 xclip
 go
 flatpak
+thunderbird

@@ -1,6 +1,5 @@
 nerd-fonts-fira-code
 lain-git
-mailspring
 onlyoffice-bin
 beautyline
 nordic-theme-git
