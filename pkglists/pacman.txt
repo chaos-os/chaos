@@ -43,7 +43,6 @@ virtualbox-guest-utils
 libsecret
 gnome-keyring
 sof-firmware
-okular
 gvfs
 exa
 ripgrep
