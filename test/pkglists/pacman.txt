@@ -93,8 +93,6 @@ gtk-cyberpunk-neon-theme-git
 anything-sync-daemon
 tor
 imwheel
-qutebrowser
-profile-sync-daemon
 emacs-nativecomp
 cmake
 pipewire
