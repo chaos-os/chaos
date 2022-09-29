@@ -591,8 +591,6 @@ sudo systemctl enable clamav-freshclam.service clamav-clamonacc.service clamav-d
 sudo systemctl enable libvirtd.service || echo "ERROR: Failed to enable libvirtd"
 sudo systemctl enable set-cfs-tweaks.service || echo "ERROR: Failed to enable cfs tweaks"
 sudo systemctl enable asd.service asd-resync.service asd-resync.timer || echo "ERROR: Failed to enable anything-sync-daemon"
-psd 2>/dev/null 1>/dev/null
-sudo systemctl enable psd.service psd-resync.service || echo "ERROR: Failed to enable profile-sync-daemon"
 
 cd ~/neon-os
 sudo mkdir -p ~/.config/systemd/user/ || "ERROR: Folder already exists"
