@@ -5,6 +5,7 @@ ttf-iosevka-nerd
 otf-font-awesome
 ttf-joypixels
 kitty
+rustup
 alsa-firmware
 base-devel
 alsa-utils
