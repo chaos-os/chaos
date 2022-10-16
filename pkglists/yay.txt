@@ -15,7 +15,6 @@ peazip-qt-bin
 cfs-zen-tweaks
 ventoy-bin
 pokete
-raven-reader-bin
 dracula-gtk-theme
 sweet-dark-theme
 candy-icons-git
