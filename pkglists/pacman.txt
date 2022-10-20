@@ -36,14 +36,6 @@ pulseaudio
 pulseaudio-alsa
 qt5ct
 ufw
-cockpit
-cockpit-machines
-virt-viewer
-cockpit-pcp
-pcp
-packagekit
-libvirt
-iptables-nft
 xorg
 virtualbox-guest-utils
 libsecret
