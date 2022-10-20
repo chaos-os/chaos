@@ -92,6 +92,9 @@ neon-os-configs-git
 VVallpapers-git
 gtk-cyberpunk-neon-theme-git
 anything-sync-daemon
+profile-sync-daemon
+qutebrowser
+python-adblock
 tor
 imwheel
 emacs-nativecomp
