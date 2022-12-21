@@ -1,6 +1,5 @@
 nerd-fonts-fira-code
 lain-git
-onlyoffice-bin
 beautyline
 nordic-theme-git
 kripton-theme-git

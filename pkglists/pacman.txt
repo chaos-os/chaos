@@ -112,3 +112,4 @@ xclip
 go
 flatpak
 thunderbird
+libreoffice
