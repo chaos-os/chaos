@@ -1,6 +1,5 @@
 nerd-fonts-fira-code
 lain-git
-onlyoffice-bin
 beautyline
 nordic-theme-git
 kripton-theme-git
@@ -12,10 +11,7 @@ ncpamixer
 tabulate
 universal-android-debloater-bin
 peazip-qt-bin
-cfs-zen-tweaks
 ventoy-bin
-pokete
-raven-reader-bin
 dracula-gtk-theme
 sweet-dark-theme
 candy-icons-git
@@ -25,3 +21,4 @@ solarized-dark-themes
 numix-circle-icon-theme-git
 polkit-dumb-agent
 lightly-git
+wireplumber
