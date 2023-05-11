@@ -1,4 +1,3 @@
-nerd-fonts-fira-code
 lain-git
 beautyline
 nordic-theme-git

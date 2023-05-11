@@ -33,6 +33,7 @@ picom
 qt5ct
 ufw
 xorg
+virtualbox
 virtualbox-guest-utils
 libsecret
 gnome-keyring
