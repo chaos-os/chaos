@@ -10,7 +10,7 @@
 
 <p align="center">
     <b align="center"><a href="./README.md">Readme</a></b> |
-    <b><a href="https://discord.gg/k4GH2TnZ">Discord</a></b> |
+    <b><a href="https://discord.gg/2dnwQcuVCp">Discord</a></b> |
     <b><a href="https://github.com/chaos-os/chaos">GitHub</a></b></b>
 </p>
 
