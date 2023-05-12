@@ -17,5 +17,4 @@ It would be a good idea to keep a clean installation of an Arch-based distro in 
 - Provide a brief description of the changes you made in the pull request.
 - Provide an appropriate header for the pull request.
 
-
 **NOTE:** The rolling branch is where all contributions should go. In simple terms, it is the working branch for this project.
