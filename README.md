@@ -37,11 +37,11 @@
 <p>
     <b> Don't worry, We will not provide you with this: </b>
     <br/>
-    <img href="./images/chaotic_desktop.jpg"/>
+    <img src="./images/chaotic_desktop.jpg">
     <br/>
     <b> Instead we provide you with this: </b>
     <br/>
-    <img href="./images/preview.png"/>
+    <img src="./images/preview.png">
     <br/>
 </p>
 
