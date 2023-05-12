@@ -113,7 +113,7 @@ update_mirrorlists() {
 	echo "---C----              Configuring mirrors                           ---C----"
 	sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
 	sudo pacman -S reflector rsync --ask 4
-	sudo reflector -l 20 -f 5 -a 48 --sort rate --save /etc/pacman.d/mirrorlist
+	sudo reflector --save /etc/pacman.d/mirrorlist -a 48 -l 20 -f 5 --sort rate --protocol https --verbose --download-timeout 60
 	sudo cp etc/pacman.conf /etc/pacman.conf
 	sudo pacman -Sy neon-os-pacman --overwrite=\* --ask 4
 }
@@ -548,14 +548,14 @@ echo "########                  PLACING THE CONFIG FILES                  ######
 echo "############################################################################"
 
 cd ~/neon-os
-sudo cp -rf /etc/neon-os/dotfiles/.config ~/
-sudo chown -R $USER ~/.config
-sudo cp -rf /etc/neon-os/dotfiles/.emacs.d ~/
-sudo chown -R $USER ~/.emacs.d
-sudo cp -rf /etc/neon-os/dotfiles/.imwheelrc ~/
-sudo chown $USER ~/.imwheelrc
-sudo cp -rf /etc/neon-os/dotfiles/.bashrc ~/
-sudo chown $USER ~/.bashrc
+
+if [[ -d "/etc/neon-os/dotfiles/.config/" ]]; then
+	sudo cp -rsvf /etc/neon-os/dotfiles/.config/* ~/.config/
+	sudo chown $USER -R ~/.config/
+else
+	echo "ERROR: Failed to place configs"
+fi
+
 sudo cp -r etc/all-themes-sddm/ /usr/share/sddm/themes/
 sudo cp etc/ufetch-arch /usr/bin/
 sudo cp -r snapper-configs/* /etc/snapper/configs/
@@ -580,16 +580,12 @@ echo "########                    ENABLING SERVICES                       ######
 echo "############################################################################"
 
 sudo systemctl enable bluetooth || echo "ERROR: Failed to enable bluetooth"
-sudo systemctl enable alsa-state.service alsa-restore.service || echo "ERROR: Failed to enable alsa"
-sudo systemctl enable pulseaudio || echo "ERROR: Failed to enable pulseaudio"
 # sudo systemctl enable reflector.service reflector.timer || echo "ERROR: Failed to enable reflector"
 sudo systemctl enable snapper-timeline.timer snapper-cleanup.timer || echo "ERROR: Failed to enable snapper"
 sudo timedatectl set-ntp true || echo "ERROR: Failed to set ntp time"
 sudo systemctl mask systemd-rfkill.service systemd-rfkill.socket || echo "ERROR: Failed to enable systemd-rfkill"
-systemctl enable --user pipewire.service p11-kit-server.service pulseaudio.service systemd-tmpfiles-clean.timer systemd-tmpfiles-setup.service appimagelauncherd.service gnome-keyring-daemon.service obex.service gcr-ssh-agent.service gpg-agent.service || echo "ERROR: Failed to enable user level services"
-systemctl enable --user jack@.servic || echo "ERROR: Failed to enable user level services"
+systemctl enable --user pipewire.service p11-kit-server.service systemd-tmpfiles-clean.timer systemd-tmpfiles-setup.service appimagelauncherd.service gnome-keyring-daemon.service obex.service gcr-ssh-agent.service gpg-agent.service || echo "ERROR: Failed to enable user level services"
 sudo systemctl enable clamav-freshclam.service clamav-clamonacc.service clamav-daemon.socket || echo "ERROR: Failed to enable clamav"
-sudo systemctl enable libvirtd.service || echo "ERROR: Failed to enable libvirtd"
 sudo systemctl enable set-cfs-tweaks.service || echo "ERROR: Failed to enable cfs tweaks"
 sudo systemctl enable asd.service asd-resync.service asd-resync.timer || echo "ERROR: Failed to enable anything-sync-daemon"
 
@@ -597,7 +593,7 @@ cd ~/neon-os
 sudo mkdir -p ~/.config/systemd/user/ || "ERROR: Folder already exists"
 cp services/* .config/systemd/user/
 systemctl --user daemon-reload
-systemctl enable --user emacs.service ssh-agent.service imwheel.service || echo "ERROR: Failed to enable emacs ssh and imwheel services"
+systemctl enable --user ssh-agent.service imwheel.service || echo "ERROR: Failed to enable ssh and imwheel services"
 
 laptop_or_desktop() {
 	cls_n_banner || echo "ERROR: Failed to put banner."
@@ -630,9 +626,16 @@ echo "##########################################################################
 echo "########                  ADDING USER TO GROUPS                     ########"
 echo "############################################################################"
 
-sudo usermod -aG kvm,libvirt,libvirt-qemu ${USER} || echo "ERROR: Failed to add ${USER} in kvm, libvirt & libvirt-qemu groups"
+sudo usermod -aG kvm,vboxusers ${USER} || echo "ERROR: Failed to add ${USER} in kvm, vboxusers groups"
 
 cls_n_banner || echo "ERROR: Failed to put banner."
+
+echo "############################################################################"
+echo "########             LOADING VIRTUALBOX KERNEL MODULES              ########"
+echo "############################################################################"
+
+sudo rcvboxdrv modprobe
+
 echo "############################################################################"
 echo "########                      SETTING UP TPM                        ########"
 echo "############################################################################"
@@ -878,43 +881,6 @@ fail2ban_install() {
 }
 
 fail2ban_install || echo "ERROR: Failed to install fail2ban"
-
-cls_n_banner || echo "ERROR: Failed to put banner."
-echo "############################################################################"
-echo "########                       VIM OR EMACS                         ########"
-echo "############################################################################"
-
-vim_or_emacs() {
-	# internet_connection_check
-	echo "---C----                   Vim or Emacs                        ---C----"
-	while :; do
-		echo -e "1)Vim \n2)Emacs \n3)Both \n4)Quit\n"
-		read -p "select your choice: " yn
-		case $yn in
-		"3" | "")
-			echo "install all lsp plugins within neovim and run update-lsp script"
-			break
-			;;
-		"1")
-			echo "install all lsp plugins within neovim"
-			break
-			;;
-		"2")
-			sudo pacman -S stylua python-black prettier shfmt astyle lua-language-server --ask 4
-			break
-			;;
-		"4")
-			echo "terminated"
-			break
-			;;
-		*)
-			echo "Invalid answer. Please answer 1,2,3 or 4."
-			;;
-		esac
-	done
-}
-
-vim_or_emacs || echo "ERROR: Failed to install plugins for vim or emacs"
 
 cls_n_banner || echo "ERROR: Failed to put banner."
 echo "############################################################################"

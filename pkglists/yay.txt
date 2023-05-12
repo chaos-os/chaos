@@ -1,4 +1,3 @@
-nerd-fonts-fira-code
 lain-git
 beautyline
 nordic-theme-git
@@ -11,9 +10,11 @@ ncpamixer
 tabulate
 universal-android-debloater-bin
 peazip-qt-bin
-cfs-zen-tweaks
 ventoy-bin
+<<<<<<< HEAD
 pokete
+=======
+>>>>>>> main
 dracula-gtk-theme
 sweet-dark-theme
 candy-icons-git
@@ -23,3 +24,5 @@ solarized-dark-themes
 numix-circle-icon-theme-git
 polkit-dumb-agent
 lightly-git
+wireplumber
+tplay-git
