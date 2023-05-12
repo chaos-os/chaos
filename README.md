@@ -35,13 +35,17 @@
 **ChaOS** is the name that we have chosen for our pre-installation script which will deploy our configuration files and helper scripts to create a proper full-fleged desktop experience it is basically our desktop environment on your machine.
 
 <p>
+    <br/>
     <b> Don't worry, We will not provide you with this: </b>
     <br/>
-    <img src="./images/chaotic_desktop.jpg">
+    <br/>
+    <img src="./images/chaotic_desktop.jpg" width="500px">
+    <br/>
     <br/>
     <b> Instead we provide you with this: </b>
     <br/>
-    <img src="./images/preview.png">
+    <br/>
+    <img src="./images/preview.png" width="500px">
     <br/>
 </p>
 
