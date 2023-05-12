@@ -6,12 +6,15 @@
   <br />
 </h1>
 
-<b align="center">An Operating System For The ChaOS Makers</b>
+<p align="center"><b>An Operating System For The ChaOS Makers</b></p>
 
 <p align="center">
     <b align="center"><a href="./README.md">Readme</a></b> |
     <b><a href="https://discord.gg/k4GH2TnZ">Discord</a></b> |
     <b><a href="https://github.com/chaos-os/chaos">GitHub</a></b></b>
+</p>
+
+<p align="center">
     <a href="https://github.com/chaos-os/chaos/pulse">
         <img alt="Maintenance" src="https://img.shields.io/maintenance/yes/2023">
     </a>
@@ -32,13 +35,17 @@
 **ChaOS** is the name that we have chosen for our pre-installation script which will deploy our configuration files and helper scripts to create a proper full-fleged desktop experience it is basically our desktop environment on your machine.
 
 <p>
+    <br/>
     <b> Don't worry, We will not provide you with this: </b>
     <br/>
-    <img href="./images/chaotic_desktop.jpg"/>
+    <br/>
+    <img src="./images/chaotic_desktop.jpg" width="500px">
+    <br/>
     <br/>
     <b> Instead we provide you with this: </b>
     <br/>
-    <img href="./images/preview.png"/>
+    <br/>
+    <img src="./images/preview.png" width="500px">
     <br/>
 </p>
 
