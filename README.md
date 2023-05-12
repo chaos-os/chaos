@@ -1,249 +1,254 @@
-# ABOUT Neon-OS
+<h1 align="center">
+  <br />
+  <br />
+  <img align="center" width="500px" src="./images/logo.png" />
+  <br />
+  <br />
+</h1>
 
-**neon-os** is the name that we have chosen for our pre-installation
-script which will deploy our configuration files and helper scripts to
-create a proper full-fleged desktop experience it is basically our
-desktop environment on your machine.
+<b align="center">An Operating System For The ChaOS Makers</b>
 
-# Preview
+<p align="center">
+    <b align="center"><a href="./README.md">Readme</a></b> |
+    <b><a href="https://discord.gg/k4GH2TnZ">Discord</a></b> |
+    <b><a href="https://github.com/chaos-os/chaos">GitHub</a></b></b>
+    <a href="https://github.com/chaos-os/chaos/pulse">
+        <img alt="Maintenance" src="https://img.shields.io/maintenance/yes/2023">
+    </a>
+    <a href="#">
+        <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/chaos-os/chaos">
+    </a>
+    <a href="https://github.com/chaos-os/chaos/issues">
+        <img alt="GitHub issues" src="https://img.shields.io/github/issues-raw/chaos-os/chaos">
+    </a>
+    <a href="https://github.com/chaos-os/chaos/pulls">
+        <img alt="GitHub pull requests" src="https://img.shields.io/github/issues-pr-raw/chaos-os/chaos">
+    </a>
+    <a href="./LICENSE">
+        <img alt="GitHub" src="https://img.shields.io/github/license/chaos-os/chaos">
+    </a>
+</p>
 
-## Awesomewm
+**ChaOS** is the name that we have chosen for our pre-installation script which will deploy our configuration files and helper scripts to create a proper full-fleged desktop experience it is basically our desktop environment on your machine.
 
-### Preview coming Soon
+<p>
+    <b> Don't worry, We will not provide you with this: </b>
+    <br/>
+    <img href="./images/chaotic_desktop.jpg"/>
+    <br/>
+    <b> Instead we provide you with this: </b>
+    <br/>
+    <img href="./images/preview.png"/>
+    <br/>
+</p>
 
-## Qtile (Flagship)
+> **Note**
+> Right now we just provide a pre-installation script but with more contribution we will move to provide a complete installation-script like `archinstall` and with even more contributions we would create our own iso with calamares installer.
 
-### Preview coming Soon
+> **Warning**
+> - ChaOS is only for **x86-64 architecture** and will mot work on arm or any other architectures.
+> - The installation-script should only be run after the base install of **arch linux** in user mode in the tty.
 
-## I3wm
+<details>
+  <summary><b>Table of Contents</b></summary>
+  <p>
 
-### Preview coming Soon
+- **Getting Started**
+    - [📦 What Do We Provide Out of The Box] (#what-do-we-provide-out-of-the-box-)
+    - [✔️( Prerequisites](#prerequisites-)
+    - [🛠️ Installation](#installation-)
+    - [🚀 Updating ChaOS](#updating-chaos-)
+    - [⚙️P Post Installation Setup](#post-installation-setup-)
+    - [🪲 Common Issues](#common-issues-)
+- **Community**
+    - [🗨️ FAQ (Frequently Asked Questions)](#faq-frequently-asked-questions-)
+    - [📣 More Contributers Wanted](#more-contributers-wanted-)
+    - [💖 Supporting Websurfx](#supporting-websurfx-)
+    - [📘 Documentation](#documentation-)
+    - [🛣️ Roadmap](#roadmap-)
+    - [🙋 Contributing](#contributing-)
+    - [📜 License](#license-)
+    - [🤝 Credits](#credits-)
 
-# NOTE
+  </p>
+</details>
 
--   neon-os is only for **x86~64~ architecture** and will mot work on
-    arm or any other architectures.
+# What Do We Provide Out of The Box 📦
 
--   The installation-script should only be run after the base install in
-    user mode
+- [Several helper scripts](https://github.com/chaos-os/chaos-scripts)
+- 9 colorschemes to choose from by default
+    - Nord
+    - Dracula
+    - Catppuccin-mocha
+    - Gruvbox-dark
+    - Solarized-dark
+    - Solarized-light
+    - Tomorrow-night
+    - monokai
+    - oceanic-next
+- [neon-podcaster](https://github.com/neon-mmd/neon-podcaster) - podcast client
+- [stdm](https://github.com/neon-mmd/stdm) - manpage searching application
+- [neon-logout](https://github.com/neon-mmd/neon-logout) - logout menu application
+- [tplay](https://github.com/maxcurzi/tplay) - An ascii video player _developed by Max Curzi_.
+- All the applications I use on daily basis.
 
-# What it provides out of the box
+**[⬆️ Back to Top](#websurfx)**
 
-## Config files
+# Prerequisites ✔️
 
--   Qtile config
--   Awesomewm Config
--   I3wm config
--   Neovim config
--   Emacs config
--   etc.
-
-## Helper scripts
-
--   article-viewer-convertor --\> For downloading and reading articles
-    offline.
--   battery-notifier (For laptop users) --\> For notifying if battery
-    has reached it\'s limits.
--   common-websites --\> Bookmarks for common websites you visit.
--   distro-updater --\> For updating the system to the latest.
--   google-meet --\> To make joining conference call easier.
--   gpu-hybrid-switcher --\> To make switching from one gpu to another
-    easier (Specially for AMD gpu users.).
--   search-engines --\> Search through the web using the search engines
-    you define.
--   themes-changer --\> Change themes easily with this script.
-
-## Applications/Utilities
-
--   neon-podcaster --\> To listen to podcast from the terminal, for more
-    info please [visit.](https://gitlab.com/NEON-MMD/neon-podcaster)
--   STDM --\> To making searching manual pages easier, for more info
-    please [visit.](https://gitlab.com/NEON-MMD/stdm)
--   neon-logout --\> Logout menu, for more info please
-    [visit.](https://gitlab.com/NEON-MMD/neon-logout)
--   All the applications I use on daily basis.
-
-# Arch Linux installation recommendations/suggestions
-
-If you want to have increased performance, security and lower power
-consumption. Take a look at [RECOMMENDATIONS.org](RECOMMENDTIONS.org).
-
-# prerequisites
-
-Make sure you have installed all of the following prerequisites on your
-machine:
+Before you start, make sure you have installed the following prerequisites on your machine:
 
 1.  Git
 
 ``` shell
-
 sudo pacman -Sy git
-
 ```
 
-1.  Grub
+2.  Grub
 
 ``` shell
-
 sudo pacman -Sy grub
-
 ```
 
-# Installation
+**[⬆️ Back to Top](#websurfx)**
+
+# Installation 🛠️
+
+To install ChaOS run the following commands:
 
 ``` shell
-
-git clone https://gitlab.com/NEON-MMD/neon-os.git
-cd neon-os
-chmod +x neon-os
-./neon-os
-
+git clone https://github.com/chaos-os/chaos.git
+cd chaos
+./chaos
 ```
 
-# Updating Neon OS
+**[⬆️ Back to Top](#websurfx)**
 
-Before running the following commands make sure to backup your config by
-running the following commands:
+# Updating ChaOS 🚀
+
+ChaOS can be updated like any other Arch-based linux distros:
 
 ``` shell
-
-cd ~
-mv .config .config.bak
-mv .emacs.d/init.el .emacs.d/init.el.bak
-mv .emacs.d/modules .emacs.d/modules.bak
-mv .imwheelrc .imwheelrc.bak
-mv .bashrc .bashrc.bak
-
+sudo pacman -Syu
 ```
 
-Then run the following commands to update your system:
+or if you prefer abbreviated version:
 
 ``` shell
-
-cd /etc/neon-os/dotfiles/
-sudo cp -rf .config/ ~/
-sudo cp .emacs.d/init.el ~/.emacs.d/
-sudo cp -rf .emacs.d/modules ~/.emacs.d/modules
-sudo cp .imwheelrc ~/
-sudo cp .bashrc ~/
-
-cd ~
-sudo chown -R $USER .config/
-sudo chown -R $USER .emacs.d/modules
-sudo chown $USER .emacs.d/init.el
-sudo chown $USER .imwheelrc
-sudo chown $USER .bashrc
-
+pupd
 ```
 
-Then run the following command to install packages neccesory for the
-update:
+If you want to use the latest config files you can use the following script to update the configs by running the following command:
 
 ``` shell
-
 distro-updater
-
 ```
 
-# Notifications in Neon OS
+**[⬆️ Back to Top](#websurfx)**
 
-By default Neon OS does not provide any notification server but if you
-want to have noftification follow this guides below:
+# Post Installation Setup ⚙️
 
--   <https://github.com/Toqozz/wired-notify>
--   <https://github.com/Toqozz/wired-notify/wiki>
+## General Setup
 
-# Contributing
+- Set the theme using `lxappearance` and `qt5ct`.
+- Check the aliases that are avilable for use by running the following command in the terminal:
 
-Contributions are welcome. It does not matter who you are you can still
-contribute to the project in your way :).
+``` shell
+alias
+```
 
-## Not a developer but still want to contribute
+## Neovim Setup
 
-Here is [video](https://youtu.be/FccdqCucVSI) by Mr. Nick on how to
-contribute and credit to him as well
+- To setup neovim run the following command:
+
+``` shell
+nvim +PackerSync
+```
+
+> **Note** 
+> If you get errors while running the above command it is `normal` and after the installation finished rerun the above command once more an then you will have neovim setup on your system. 
+
+**[⬆️ Back to Top](#websurfx)**
+
+# Common Issues 🪲
+
+## Why is flatpak/snap/appimage not working?
+
+By default we configure an option in `sysctl` to disable access of namespace cloning by unprivileged user for security reasons but this option used by the container based technologies like flatpaks, appimages and snaps to launch the apps. To allow them to launch apps you will need to disable this option by commenting it in sysctl config which is located under `/etc/sysctl.d/99-sysctl.conf`:
+
+``` conf
+# Disable namespace access for unprivileged user
+# kernel.unprivileged_userns_clone=0
+```
+
+After editing the file and saving it run the following command:
+
+```shell
+sudo sysctl --system
+```
+
+Now you will be able to launch flatpaks/appimages/snaps as usual.
+
+**[⬆️ Back to Top](#websurfx)**
+
+# FAQ (Frequently Asked Questions) 💬
+
+## Why ChaOS?
+
+Through the medium of this distro we provide you with both secure, customizable and fast linux distro by tweaking and configuring all available options as best as we can and providing the best experience to the user.
+
+## Can ChaOS be installed on non-systemd Arch-Linux?
+
+Yes, It can be made to run on non-systemd arch linux but it will require tweaking and playing with chaos installer which do not recommend if you are not an experienced linux user because you may change the installer in a way which makes it unusable or gives you a broken or partially installed system.
+
+**[⬆️ Back to Top](#websurfx)**
+
+# More Contributers Wanted 📣 
+
+We are looking for more willing contributors to help grow this project. For more information on how you can contribute, check out the [project board](https://github.com/neon-mmd/websurfx/projects?query=is%3Aopen) and the [CONTRIBUTING.org](CONTRIBUTING.org) file for guidelines and rules for making contributions.
+
+**[⬆️ Back to Top](#websurfx)**
+
+# Contributing 🙋 
+
+Contributions are welcome from anyone. It doesn\'t matter who you are; you can still contribute to the project in your way.
+
+## Not a developer but still want to contribute?
+
+Check out this [video](https://youtu.be/FccdqCucVSI) by Mr. Nick on how to contribute.
 
 ## Developer
 
-If you are developer, have a look at the
-[CONTRIBUTING.org](CONTRIBUTING.org) document for more information.
+If you are a developer, have a look at the [CONTRIBUTING.org](CONTRIBUTING.org) document for more information.
 
-# advice or suggestions
+**[⬆️ Back to Top](#websurfx)**
 
-For any advice or suggestion email us on:
+# License 📜 
 
--   archlinuxpackagemaintainer@gmail.com
--   mohammed.patel19@vit.edu
+ChaOS is available under the [GPLv3](LICENSE) license.
 
-# Post-installation
+**[⬆️ Back to Top](#websurfx)**
 
-## Todo
+# Credits 🤝 
 
--   Set the theme using lxappearance.
--   Check the aliases to use by running the following command:
+We would like to thank the following people for their contributions and support:
 
-``` shell
+<p>
+  <br />
+  <a href="https://github.com/chaos-os/chaos/graphs/contributors">
+    <img src="https://contrib.rocks/image?repo=chaos-os/chaos" />
+  </a>
+  <br />
+</p>
 
-alias
+**[⬆️ Back to Top](#websurfx)**
 
-```
+---
 
-### Neovim
-
--   To get vim setup launch neovim, ignore all the errors by pressing
-    \<enter\> on your keyboard and wait for all the plugins to get
-    installed and relaunch if neccessory.
-
-Now you will have neovim setup.
-
-### Emacs
-
--   To start using emacs, just launch for the first time and wait for
-    all the packages to install and relaunch emacs and then do the
-    following steps to finish the setup:
-
-    -   **Step 1:**
-
-        Press Alt+x on your keyboard, a popup will appear type
-        **all-the-icons-install-fonts** and press \<enter\> and then it
-        will prompt you to install some fonts press y on the keyboard.
-
-    -   **Step 2:**
-
-        Press Alt+x on your keyboard and type **emojify-mode** and press
-        \<enter\> and then it will prompt you to install some fonts
-        press y on the keyboard.
-
-Now you will have emacs setup.
-
-**NOTE:** Before launching emacs for the first time make sure you do not
-have emacs running as a daemon.
-
-To stop emacs from running in daemon run the following command:
-
-``` shell
-
-ustop emacs.service
-
-```
-
-or
-
-``` shell
-
-systemctl stop --user emacs.service
-
-```
-
-## common issues
-
-# Credits
-
--   Mr.Derek Taylor \@gitlab.com/dwt1
--   the lain community
--   the arch community
--   paru aur community
--   awesomewm community
--   qtile community
--   i3 community
--   polybar community
+<p align="center">
+  <a href="https://github.com/neon-mmd/websurfx">
+    <img src="https://github.githubassets.com/images/icons/emoji/octocat.png" />
+  </a>
+  <br /><br />
+  <i>Thank you for Visiting</i>
+</p>
