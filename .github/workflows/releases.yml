@@ -9,7 +9,7 @@ concurrency:
 
 jobs:
   changelog:
-    if: github.repository == 'neon-mmd/websurfx '
+    if: github.repository == 'chaos-os/chaos'
     runs-on: ubuntu-latest
 
     steps:
