@@ -6,8 +6,8 @@ It would be a good idea to keep a clean installation of an Arch-based distro in 
 
 ## Knowledge required
 
--   Bash basics.
--   Linux command line utils should be known.
+- Bash basics.
+- Linux command line utils should be known.
 
 ## guidlines
 
