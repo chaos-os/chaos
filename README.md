@@ -54,7 +54,7 @@
   <p>
 
 - **Getting Started**
-    - [📦 What Do We Provide Out of The Box] (#what-do-we-provide-out-of-the-box-)
+    - [📦 What Do We Provide Out of The Box](#what-do-we-provide-out-of-the-box-)
     - [✔️( Prerequisites](#prerequisites-)
     - [🛠️ Installation](#installation-)
     - [🚀 Updating ChaOS](#updating-chaos-)
@@ -92,7 +92,7 @@
 - [tplay](https://github.com/maxcurzi/tplay) - An ascii video player _developed by Max Curzi_.
 - All the applications I use on daily basis.
 
-**[⬆️ Back to Top](#websurfx)**
+**[⬆️ Back to Top](#----------)**
 
 # Prerequisites ✔️
 
@@ -110,7 +110,7 @@ sudo pacman -Sy git
 sudo pacman -Sy grub
 ```
 
-**[⬆️ Back to Top](#websurfx)**
+**[⬆️ Back to Top](#----------)**
 
 # Installation 🛠️
 
@@ -122,7 +122,7 @@ cd chaos
 ./chaos
 ```
 
-**[⬆️ Back to Top](#websurfx)**
+**[⬆️ Back to Top](#----------)**
 
 # Updating ChaOS 🚀
 
@@ -144,7 +144,7 @@ If you want to use the latest config files you can use the following script to u
 distro-updater
 ```
 
-**[⬆️ Back to Top](#websurfx)**
+**[⬆️ Back to Top](#----------)**
 
 # Post Installation Setup ⚙️
 
@@ -168,7 +168,7 @@ nvim +PackerSync
 > **Note** 
 > If you get errors while running the above command it is `normal` and after the installation finished rerun the above command once more an then you will have neovim setup on your system. 
 
-**[⬆️ Back to Top](#websurfx)**
+**[⬆️ Back to Top](#----------)**
 
 # Common Issues 🪲
 
@@ -189,7 +189,7 @@ sudo sysctl --system
 
 Now you will be able to launch flatpaks/appimages/snaps as usual.
 
-**[⬆️ Back to Top](#websurfx)**
+**[⬆️ Back to Top](#----------)**
 
 # FAQ (Frequently Asked Questions) 💬
 
@@ -201,13 +201,13 @@ Through the medium of this distro we provide you with both secure, customizable 
 
 Yes, It can be made to run on non-systemd arch linux but it will require tweaking and playing with chaos installer which do not recommend if you are not an experienced linux user because you may change the installer in a way which makes it unusable or gives you a broken or partially installed system.
 
-**[⬆️ Back to Top](#websurfx)**
+**[⬆️ Back to Top](#----------)**
 
 # More Contributers Wanted 📣 
 
 We are looking for more willing contributors to help grow this project. For more information on how you can contribute, check out the [project board](https://github.com/neon-mmd/websurfx/projects?query=is%3Aopen) and the [CONTRIBUTING.org](CONTRIBUTING.org) file for guidelines and rules for making contributions.
 
-**[⬆️ Back to Top](#websurfx)**
+**[⬆️ Back to Top](#----------)**
 
 # Contributing 🙋 
 
@@ -221,13 +221,13 @@ Check out this [video](https://youtu.be/FccdqCucVSI) by Mr. Nick on how to contr
 
 If you are a developer, have a look at the [CONTRIBUTING.org](CONTRIBUTING.org) document for more information.
 
-**[⬆️ Back to Top](#websurfx)**
+**[⬆️ Back to Top](#----------)**
 
 # License 📜 
 
 ChaOS is available under the [GPLv3](LICENSE) license.
 
-**[⬆️ Back to Top](#websurfx)**
+**[⬆️ Back to Top](#----------)**
 
 # Credits 🤝 
 
@@ -241,7 +241,7 @@ We would like to thank the following people for their contributions and support:
   <br />
 </p>
 
-**[⬆️ Back to Top](#websurfx)**
+**[⬆️ Back to Top](#----------)**
 
 ---
 
