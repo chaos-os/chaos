@@ -11,11 +11,10 @@ It would be a good idea to keep a clean installation of an Arch-based distro in 
 
 ## guidlines
 
-- please be patient
-- treat everyone with respect --- (\"give respect and take respect\")
-- document your code properly
-- provide a brief description of what changes you made in the pull
-  request
-- provide an apropriate header to pull requests
+- Please be patient
+- Treat everyone with respect --- (\"give respect and take respect\")
+- Document your code properly
+- Provide a brief description of what changes you made in the pull request
+- Provide an apropriate header to pull requests
 
 **NOTE:** The rolling branch is where all contributions should go. In simple terms, it is the working branch for this project.
