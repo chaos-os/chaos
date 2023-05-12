@@ -12,7 +12,7 @@ It would be a good idea to keep a clean installation of an Arch-based distro in 
 ## guidlines
 
 - Please be patient.
-- Treat everyone with respect -- \"give respect and take respect.\"
+- Treat everyone with respect --- \"give respect and take respect.\"
 - Document your code properly with Rust coding conventions in mind.
 - Provide a brief description of the changes you made in the pull request.
 - Provide an appropriate header for the pull request.
