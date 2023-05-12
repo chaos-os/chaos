@@ -6,13 +6,15 @@
   <br />
 </h1>
 
-<b align="center">An Operating System For The ChaOS Makers</b>
+<p align="center"><b>An Operating System For The ChaOS Makers</b></p>
 
 <p align="center">
     <b align="center"><a href="./README.md">Readme</a></b> |
     <b><a href="https://discord.gg/k4GH2TnZ">Discord</a></b> |
     <b><a href="https://github.com/chaos-os/chaos">GitHub</a></b></b>
-    <br/>
+</p>
+
+<p align="center">
     <a href="https://github.com/chaos-os/chaos/pulse">
         <img alt="Maintenance" src="https://img.shields.io/maintenance/yes/2023">
     </a>
