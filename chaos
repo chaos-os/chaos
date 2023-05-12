@@ -548,14 +548,14 @@ echo "########                  PLACING THE CONFIG FILES                  ######
 echo "############################################################################"
 
 cd ~/neon-os
-sudo cp -rf /etc/neon-os/dotfiles/.config ~/
-sudo chown -R $USER ~/.config
-sudo cp -rf /etc/neon-os/dotfiles/.emacs.d ~/
-sudo chown -R $USER ~/.emacs.d
-sudo cp -rf /etc/neon-os/dotfiles/.imwheelrc ~/
-sudo chown $USER ~/.imwheelrc
-sudo cp -rf /etc/neon-os/dotfiles/.bashrc ~/
-sudo chown $USER ~/.bashrc
+
+if [[ -d "/etc/neon-os/dotfiles/.config/" ]]; then
+	sudo cp -rsvf /etc/neon-os/dotfiles/.config/* ~/.config/
+	sudo chown $USER -R ~/.config/
+else
+	echo "ERROR: Failed to place configs"
+fi
+
 sudo cp -r etc/all-themes-sddm/ /usr/share/sddm/themes/
 sudo cp etc/ufetch-arch /usr/bin/
 sudo cp -r snapper-configs/* /etc/snapper/configs/
@@ -593,7 +593,7 @@ cd ~/neon-os
 sudo mkdir -p ~/.config/systemd/user/ || "ERROR: Folder already exists"
 cp services/* .config/systemd/user/
 systemctl --user daemon-reload
-systemctl enable --user emacs.service ssh-agent.service imwheel.service || echo "ERROR: Failed to enable emacs ssh and imwheel services"
+systemctl enable --user ssh-agent.service imwheel.service || echo "ERROR: Failed to enable ssh and imwheel services"
 
 laptop_or_desktop() {
 	cls_n_banner || echo "ERROR: Failed to put banner."
@@ -881,43 +881,6 @@ fail2ban_install() {
 }
 
 fail2ban_install || echo "ERROR: Failed to install fail2ban"
-
-cls_n_banner || echo "ERROR: Failed to put banner."
-echo "############################################################################"
-echo "########                       VIM OR EMACS                         ########"
-echo "############################################################################"
-
-vim_or_emacs() {
-	# internet_connection_check
-	echo "---C----                   Vim or Emacs                        ---C----"
-	while :; do
-		echo -e "1)Vim \n2)Emacs \n3)Both \n4)Quit\n"
-		read -p "select your choice: " yn
-		case $yn in
-		"3" | "")
-			echo "install all lsp plugins within neovim and run update-lsp script"
-			break
-			;;
-		"1")
-			echo "install all lsp plugins within neovim"
-			break
-			;;
-		"2")
-			sudo pacman -S stylua python-black prettier shfmt astyle lua-language-server --ask 4
-			break
-			;;
-		"4")
-			echo "terminated"
-			break
-			;;
-		*)
-			echo "Invalid answer. Please answer 1,2,3 or 4."
-			;;
-		esac
-	done
-}
-
-vim_or_emacs || echo "ERROR: Failed to install plugins for vim or emacs"
 
 cls_n_banner || echo "ERROR: Failed to put banner."
 echo "############################################################################"

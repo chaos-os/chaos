@@ -141,7 +141,7 @@ pupd
 If you want to use the latest config files you can use the following script to update the configs by running the following command:
 
 ``` shell
-distro-updater
+update-configs
 ```
 
 **[⬆️ Back to Top](#----------)**

@@ -21,3 +21,4 @@ numix-circle-icon-theme-git
 polkit-dumb-agent
 lightly-git
 wireplumber
+tplay-git
