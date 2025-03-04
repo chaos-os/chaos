@@ -586,11 +586,13 @@ sudo systemctl mask systemd-rfkill.service systemd-rfkill.socket || echo "ERROR:
 sudo systemctl mask tmp.mount || echo "ERROR: Failed to mask tmp.mount"
 systemctl enable --user pipewire.service psd.service p11-kit-server.service systemd-tmpfiles-clean.timer systemd-tmpfiles-setup.service gnome-keyring-daemon.service gcr-ssh-agent.service gpg-agent.service wireplumber.service || echo "ERROR: Failed to enable user level services"
 # sudo systemctl enable clamav-freshclam.service clamav-clamonacc.service clamav-daemon.socket || echo "ERROR: Failed to enable clamav"
-sudo systemctl enable set-cfs-tweaks.service || echo "ERROR: Failed to enable cfs tweaks"
+sudo systemctl enable set-cfs-tweaks.service || echo "ERROR: Failed to enable EEDVF cpu schedular tweaks"
+sudo systemctl enable set-pcie-latency.service || echo "ERROR: Failed to enable PCI-E latency tweaks"
 # sudo systemctl enable asd.service asd-resync.service asd-resync.timer || echo "ERROR: Failed to enable anything-sync-daemon"
 sudo systemctl enable irqbalance.service || echo "ERROR: Failed to enable irqbalance"
 sudo systemctl enable preload.service ||echo "ERROR: Failed to enable preload"
 sudo systemctl enable rtkit-daemon.service ||echo "ERROR: Failed to enable rtkit"
+sudo systemctl enable ananicy-cpp.service ||echo "ERROR: Failed to enable ananicy-cpp"
 
 cd ~/chaos
 sudo mkdir -p ~/.config/systemd/user/ || "ERROR: Folder already exists"

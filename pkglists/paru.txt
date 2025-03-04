@@ -25,3 +25,5 @@ preload
 ente-auth-bin
 notesnook-bin
 onlyoffice-bin
+cfs-zen-tweaks
+librewolf-bin

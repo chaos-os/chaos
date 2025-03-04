@@ -82,6 +82,8 @@ chaos-systemd-watchdog
 chaos-configs-git
 chaos-sysctl
 chaos-grub
+chaos-librewolf-settings
+chaos-pcie-latency-tweaks
 grub-theme-heisenberg-chemistry-git
 VVallpapers-git
 gtk-cyberpunk-neon-theme-git
@@ -132,3 +134,6 @@ zstd
 lrzip
 lzop
 lz4
+grub-customizer
+vifm
+ananicy-cpp
